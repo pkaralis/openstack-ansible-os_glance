@@ -16,16 +16,6 @@ daemon = False
 # Loop time between checking for new items to schedule for delete
 wakeup_time = 300
 
-# Directory that the scrubber will use to remind itself of what to delete
-# Make sure this is also set in glance-api.conf
-scrubber_datadir = {{ glance_system_user_home }}/scrubber
-
-# Only one server in your deployment should be designated the cleanup host
-cleanup_scrubber = False
-
-# pending_delete items older than this time are candidates for cleanup
-cleanup_scrubber_time = 86400
-
 # Address to find the registry server for cleanups
 registry_host = {{ glance_registry_bind_address }}
 
