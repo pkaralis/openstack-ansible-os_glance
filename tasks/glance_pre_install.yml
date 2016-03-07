@@ -43,7 +43,6 @@
   with_items:
     - { path: "/openstack", mode: "0755", owner: "root", group: "root" }
     - { path: "/etc/glance" }
-    - { path: "/etc/sudoers.d", mode: "0755", owner: "root", group: "root" }
     - { path: "/var/cache/glance" }
     - { path: "{{ glance_system_user_home }}" }
     - { path: "{{ glance_system_user_home }}/cache/api", mode: "0700" }
