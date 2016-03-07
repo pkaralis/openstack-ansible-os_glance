@@ -1,11 +1,12 @@
-OpenStack glance
-################
+OpenStack-Ansible Glance
+########################
 :tags: openstack, glance, cloud, ansible
 :category: \*nix
 
-Role to install glance and glance registry.
+This Ansible role installs and configures OpenStack glance and glance
+registry.
 
-This role will install the following:
+This role will install the following Upstart services:
     * glance-api
     * glance-registry
 
