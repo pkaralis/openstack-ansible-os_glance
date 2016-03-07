@@ -30,6 +30,28 @@
   tags:
     - glance-apt-packages
 
+- name: Create developer mode constraint file
+  copy:
+    dest: "/opt/developer-pip-constraints.txt"
+    content: |
+      {% for item in glance_developer_constraints %}
+      {{ item }}
+      {% endfor %}
+  when:
+    - glance_developer_mode | bool
+  tags:
+    - glance-install
+    - glance-pip-packages
+
+- name: Set constraint file fact for developer mode
+  set_fact:
+    pip_install_options: "{{ pip_install_options|default('') }} --constraint /opt/developer-pip-constraints.txt"
+  when:
+    - glance_developer_mode | bool
+  tags:
+    - glance-install
+    - glance-pip-packages
+
 - name: Install apt packages
   apt:
     pkg: "{{ item }}"
@@ -61,7 +83,9 @@
   stat:
     path: "/var/cache/{{ glance_venv_download_url | basename }}"
     get_md5: False
-  when: glance_venv_enabled | bool
+  when:
+    - not glance_developer_mode | bool
+    - glance_venv_enabled | bool
   register: local_venv_stat
   tags:
     - glance-install
@@ -71,7 +95,9 @@
   uri:
     url: "{{ glance_venv_download_url | replace('tgz', 'checksum') }}"
     return_content: True
-  when: glance_venv_enabled | bool
+  when:
+    - not glance_developer_mode | bool
+    - glance_venv_enabled | bool
   register: remote_venv_checksum
   tags:
     - glance-install
@@ -90,6 +116,7 @@
   ignore_errors: true
   register: get_venv
   when:
+    - not glance_developer_mode | bool
     - glance_venv_enabled | bool
     - (local_venv_stat.stat.exists == False or
         {{ local_venv_stat.stat.checksum is defined and local_venv_stat.stat.checksum != remote_venv_checksum.content | trim }})
@@ -121,6 +148,7 @@
     path: "{{ glance_venv_bin | dirname }}"
     state: directory
   when:
+    - not glance_developer_mode | bool
     - glance_venv_enabled | bool
     - glance_get_venv | changed
   tags:
@@ -133,6 +161,7 @@
     dest: "{{ glance_venv_bin | dirname }}"
     copy: "no"
   when:
+    - not glance_developer_mode | bool
     - glance_venv_enabled | bool
     - glance_get_venv | changed
   notify:
@@ -145,6 +174,7 @@
   command: >
     virtualenv-tools --update-path=auto {{ glance_venv_bin | dirname }}
   when:
+    - not glance_developer_mode | bool
     - glance_venv_enabled | bool
     - glance_get_venv | success
   tags:
@@ -165,7 +195,7 @@
   with_items: glance_pip_packages
   when:
     - glance_venv_enabled | bool
-    - glance_get_venv | failed
+    - glance_get_venv | failed or glance_developer_mode | bool
   notify:
     - Restart glance services
   tags:
@@ -182,7 +212,9 @@
   retries: 5
   delay: 2
   with_items: glance_pip_packages
-  when: not glance_venv_enabled | bool
+  when:
+    - not glance_venv_enabled | bool
+    - not glance_developer_mode | bool
   notify:
     - Restart glance services
   tags:

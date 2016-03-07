@@ -20,6 +20,12 @@ verbose: True
 ## APT Cache options
 cache_timeout: 600
 
+glance_git_repo: https://git.openstack.org/openstack/glance
+glance_git_install_branch: master
+glance_developer_mode: false
+glance_developer_constraints:
+  - "git+{{ glance_git_repo }}@{{ glance_git_install_branch }}#egg=glance"
+
 # Name of the virtual env to deploy into
 glance_venv_tag: untagged
 glance_venv_bin: "/openstack/venvs/glance-{{ glance_venv_tag }}/bin"
