@@ -25,7 +25,7 @@ connection = mysql+pymysql://{{ glance_galera_user }}:{{ glance_container_mysql_
 
 [keystone_authtoken]
 insecure = {{ keystone_service_internaluri_insecure | bool }}
-auth_plugin = {{ glance_keystone_auth_plugin }}
+auth_type = {{ glance_keystone_auth_plugin }}
 signing_dir = {{ glance_system_user_home }}/cache/registry/
 auth_url = {{ keystone_service_adminurl }}
 auth_uri = {{ keystone_service_internaluri }}
