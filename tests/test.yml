@@ -272,6 +272,11 @@
         - mysql-db-setup
   roles:
     - role: "{{ rolename | basename }}"
+  tasks:
+    # needed by the functional test playbook below
+    - name: Install httplib2 so we can use the uri module
+      pip:
+        name: httplib2
   vars:
     external_lb_vip_address: 10.100.100.3
     internal_lb_vip_address: 10.100.100.3
@@ -304,3 +309,17 @@
     openrc_os_domain_name: "Default"
     memcached_servers: 127.0.0.1
     memcached_encryption_key: "secrete"
+
+- name: Playbook for functional testing glance
+  hosts: glance_all
+  user: root
+  gather_facts: false
+  tasks:
+    - name: Check the glance-api
+      uri:
+        url: "http://localhost:9292"
+        status_code: 300
+    - name: Check the glance-registry
+      uri:
+        url: "http://localhost:9191"
+        status_code: 401
