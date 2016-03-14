@@ -201,6 +201,7 @@
     keystone_venv_tag: "testing"
     keystone_developer_mode: true
     keystone_git_install_branch: a55128044f763f5cfe2fdc57c738eaca97636448
+    keystone_requirements_git_install_branch: 332278d456e06870150835564342570ec9d5f5a0
     keystone_auth_admin_token: "SuperSecreteTestToken"
     keystone_auth_admin_password: "SuperSecretePassword"
     keystone_service_password: "secrete"
@@ -296,6 +297,7 @@
     glance_venv_tag: "testing"
     glance_developer_mode: true
     glance_git_install_branch: 7d5c3710ce2739a8ac356208d4e104f2ce3ec9ab
+    glance_requirements_git_install_branch: 332278d456e06870150835564342570ec9d5f5a0
     glance_service_password: "secrete"
     glance_profiler_hmac_key: "secrete"
     openrc_os_password: "{{ keystone_auth_admin_password }}"
