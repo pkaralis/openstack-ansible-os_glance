@@ -1,0 +1,99 @@
+---
+# Copyright 2015, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Playbook for deploying glance
+  hosts: glance_all
+  user: root
+  gather_facts: true
+  pre_tasks:
+    - name: Ensure rabbitmq vhost
+      rabbitmq_vhost:
+        name: "{{ glance_rabbitmq_vhost }}"
+        state: "present"
+      delegate_to: "10.100.100.2"
+      when: inventory_hostname == groups['glance_all'][0]
+    - name: Ensure rabbitmq user
+      rabbitmq_user:
+        user: "{{ glance_rabbitmq_userid }}"
+        password: "{{ glance_rabbitmq_password }}"
+        vhost: "{{ glance_rabbitmq_vhost }}"
+        configure_priv: ".*"
+        read_priv: ".*"
+        write_priv: ".*"
+        state: "present"
+      delegate_to: "10.100.100.2"
+      when: inventory_hostname == groups['glance_all'][0]
+    - name: Create DB for service
+      mysql_db:
+        login_user: "root"
+        login_password: "secrete"
+        login_host: "localhost"
+        name: "{{ glance_galera_database }}"
+        state: "present"
+      delegate_to: "10.100.100.2"
+      when: inventory_hostname == groups['glance_all'][0]
+    - name: Grant access to the DB for the service
+      mysql_user:
+        login_user: "root"
+        login_password: "secrete"
+        login_host: "localhost"
+        name: "{{ glance_galera_database }}"
+        password: "{{ glance_container_mysql_password }}"
+        host: "{{ item }}"
+        state: "present"
+        priv: "{{ glance_galera_database }}.*:ALL"
+      with_items:
+        - "localhost"
+        - "%"
+      delegate_to: "10.100.100.2"
+      when: inventory_hostname == groups['glance_all'][0]
+  roles:
+    - role: "{{ rolename | basename }}"
+  post_tasks:
+    - include: test-glance-functional.yml
+  vars:
+    external_lb_vip_address: 10.100.100.3
+    internal_lb_vip_address: 10.100.100.3
+    glance_galera_address: 10.100.100.2
+    glance_galera_database: glance
+    glance_container_mysql_password: "SuperSecrete"
+    galera_client_drop_config_file: false
+    galera_root_password: "secrete"
+    glance_rabbitmq_password: "secrete"
+    glance_rabbitmq_userid: glance
+    glance_rabbitmq_vhost: /glance
+    rabbitmq_servers: 10.100.100.2
+    rabbitmq_use_ssl: true
+    rabbitmq_port: 5671
+    keystone_admin_user_name: admin
+    keystone_admin_tenant_name: admin
+    keystone_auth_admin_password: "SuperSecretePassword"
+    keystone_service_adminuri_insecure: false
+    keystone_service_internaluri_insecure: false
+    keystone_service_internaluri: "http://{{ internal_lb_vip_address }}:5000"
+    keystone_service_internalurl: "{{ keystone_service_internaluri }}/v3"
+    keystone_service_adminuri: "http://{{ internal_lb_vip_address }}:35357"
+    keystone_service_adminurl: "{{ keystone_service_adminuri }}/v3"
+    glance_venv_tag: "testing"
+    glance_developer_mode: true
+    glance_git_install_branch: 7d5c3710ce2739a8ac356208d4e104f2ce3ec9ab
+    glance_requirements_git_install_branch: 332278d456e06870150835564342570ec9d5f5a0
+    glance_service_password: "secrete"
+    glance_profiler_hmac_key: "secrete"
+    openrc_os_auth_url: "http://127.0.0.1:5000/v3"
+    openrc_os_password: "{{ keystone_auth_admin_password }}"
+    openrc_os_domain_name: "Default"
+    memcached_servers: 127.0.0.1
+    memcached_encryption_key: "secrete"
