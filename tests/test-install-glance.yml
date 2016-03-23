@@ -88,8 +88,8 @@
     keystone_service_adminurl: "{{ keystone_service_adminuri }}/v3"
     glance_venv_tag: "testing"
     glance_developer_mode: true
-    glance_git_install_branch: 7d5c3710ce2739a8ac356208d4e104f2ce3ec9ab
-    glance_requirements_git_install_branch: 332278d456e06870150835564342570ec9d5f5a0
+    glance_git_install_branch: stable/mitaka
+    glance_requirements_git_install_branch: f8cf7eba898a1424549c730d6692ec4e9573c0ed # HEAD of "master" as of 23.03.2016
     glance_service_password: "secrete"
     glance_profiler_hmac_key: "secrete"
     openrc_os_auth_url: "http://127.0.0.1:5000/v3"
