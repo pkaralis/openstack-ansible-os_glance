@@ -1,5 +1,4 @@
----
-# Copyright 2014, Rackspace US, Inc.
+# Copyright 2016, Intel Corporation.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,28 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-galaxy_info:
-  author: rcbops
-  description: Installation and setup of glance
-  company: Rackspace
-  license: Apache2
-  min_ansible_version: 1.6.6
-  platforms:
-    - name: Ubuntu
-      versions:
-        - trusty
-  categories:
-    - cloud
-    - python
-    - glance
-    - development
-    - openstack
-dependencies:
-  - role: apt_package_pinning
-    when:
-      - ansible_pkg_mgr == 'apt'
-  - galera_client
-  - openstack_openrc
-  - role: pip_lock_down
-    when:
-      - not glance_developer_mode | bool
+## APT Cache options
+cache_timeout: 600
+
+# Common apt packages
+glance_apt_packages:
+  - rpcbind
+  - rsync
+  - git
+  - nfs-common

@@ -17,8 +17,6 @@
 debug: False
 verbose: True
 
-## APT Cache options
-cache_timeout: 600
 
 glance_git_repo: https://git.openstack.org/openstack/glance
 glance_git_install_branch: master
@@ -181,12 +179,6 @@ glance_rbd_store_chunk_size: 8
 
 glance_service_in_ldap: false
 
-# Common apt packages
-glance_apt_packages:
-  - rpcbind
-  - rsync
-  - git
-  - nfs-common
 
 # Cinder packages that must be installed before anything else
 glance_requires_pip_packages:
