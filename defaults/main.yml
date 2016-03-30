@@ -215,4 +215,5 @@ glance_glance_registry_paste_ini_overrides: {}
 glance_glance_registry_conf_overrides: {}
 glance_glance_scrubber_conf_overrides: {}
 glance_glance_scheme_json_overrides: {}
+glance_glance_swift_store_conf_overrides: {}
 glance_policy_overrides: {}
