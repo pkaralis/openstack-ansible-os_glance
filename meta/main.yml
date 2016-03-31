@@ -30,11 +30,14 @@ galaxy_info:
     - development
     - openstack
 dependencies:
+  - role: pip_lock_down
+    when:
+      - not glance_developer_mode | bool
+  - role: pip_install
+    when:
+      - glance_developer_mode | bool
   - role: apt_package_pinning
     when:
       - ansible_pkg_mgr == 'apt'
   - galera_client
   - openstack_openrc
-  - role: pip_lock_down
-    when:
-      - not glance_developer_mode | bool
