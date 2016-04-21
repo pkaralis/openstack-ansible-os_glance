@@ -153,10 +153,15 @@ glance_policy_file: policy.json
 glance_policy_default_rule: default
 glance_policy_dirs: policy.d
 
-## Define nfs information for glance. When the glance_nfs_client dictionary is
-## defined it will enable nfs shares as mounted directories. The
-## ``glance_nfs_client`` value is a list of dictionaries that must be filled
-## out completely to enable the persistent NFS mounts.
+
+# Define nfs information to enable nfs shares as mounted directories for
+# glance. The ``glance_nfs_client`` value is a list of dictionaries that must
+# be filled out completely to enable the persistent NFS mounts.
+
+glance_nfs_client: []
+
+# Example of the expected dict structure:
+#
 # glance_nfs_client:
 #   - server: "127.0.0.1"                   ## Hostname or IP address of NFS Server
 #     remote_path: "/images"                ## Remote path from the NFS server's export

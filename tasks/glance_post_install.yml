@@ -77,9 +77,7 @@
   file:
     path: "{{ item.local_path }}"
     state: directory
-  with_items: glance_nfs_client
-  when: >
-    glance_nfs_client is defined
+  with_items: "{{ glance_nfs_client }}"
   tags:
     - glance-nfs
     - glance-nfs-local-path
@@ -91,9 +89,7 @@
     fstype: "{{ item.type }}"
     opts: "{{ item.options }}"
     state: "mounted"
-  with_items: glance_nfs_client
-  when: >
-    glance_nfs_client is defined
+  with_items: "{{ glance_nfs_client }}"
   tags:
     - glance-nfs
     - glance-nfs-local-path

@@ -30,4 +30,4 @@
     name: "{{ item }}"
     state: "restarted"
     pattern: "{{ item }}"
-  with_items: glance_service_names
+  with_items: "{{ glance_service_names }}"
