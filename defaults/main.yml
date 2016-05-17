@@ -15,7 +15,6 @@
 
 ## Verbosity Options
 debug: False
-verbose: True
 
 
 glance_git_repo: https://git.openstack.org/openstack/glance
