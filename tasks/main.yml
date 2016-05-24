@@ -22,10 +22,22 @@
   tags:
     - always
 
+- name: Check init system
+  command: cat /proc/1/comm
+  register: _pid1_name
+  tags:
+    - always
+
+- name: Set the name of pid1
+  set_fact:
+    pid1_name: "{{ _pid1_name.stdout }}"
+  tags:
+    - always
+
 - include: glance_pre_install.yml
 - include: glance_install.yml
 - include: glance_post_install.yml
-- include: glance_upstart_init.yml
+- include: glance_init.yml
 
 - include: glance_db_setup.yml
   when: >
