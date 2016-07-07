@@ -94,22 +94,6 @@
     - glance-nfs
     - glance-nfs-local-path
 
-- name: Get glance command path
-  command: which glance
-  register: glance_command_path
-  when:
-    - not glance_venv_enabled | bool
-  tags:
-    - glance-command-bin
-
-- name: Set glance command path
-  set_fact:
-    glance_bin: "{{ glance_command_path.stdout | dirname }}"
-  when:
-    - not glance_venv_enabled | bool
-  tags:
-    - glance-command-bin
-
 - name: Create glance cache management cron jobs
   cron:
     name: "{{ item.name }}"

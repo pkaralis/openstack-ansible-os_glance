@@ -52,17 +52,6 @@
   tags:
     - glance-dirs
 
-- name: Create glance venv dir
-  file:
-    path: "{{ item.path }}"
-    state: directory
-  with_items:
-    - { path: "/openstack/venvs" }
-    - { path: "{{ glance_venv_bin }}" }
-  when: glance_venv_enabled | bool
-  tags:
-    - glance-dirs
-
 - name: Test for log directory or link
   shell: |
     if [ -h "/var/log/glance"  ]; then

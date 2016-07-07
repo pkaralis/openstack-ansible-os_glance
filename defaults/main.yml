@@ -27,23 +27,13 @@ glance_developer_constraints:
 
 # Name of the virtual env to deploy into
 glance_venv_tag: untagged
-glance_venv_bin: "/openstack/venvs/glance-{{ glance_venv_tag }}/bin"
-
-# Set this to enable or disable installing in a venv
-glance_venv_enabled: true
-
-# The bin path defaults to the venv path however if installation in a
-#  venv is disabled the bin path will be dynamically set based on the
-#  system path used when the installing.
-glance_bin: "{{ glance_venv_bin }}"
+glance_bin: "/openstack/venvs/glance-{{ glance_venv_tag }}/bin"
 
 # Set the etc dir path where glance is installed.
 #  This is used for role access to the db migrations.
 #  Example:
 #  glance_etc_dir: "/usr/local/etc/glance"
-glance_venv_etc_dir: "{{ glance_bin | dirname }}/etc/glance"
-glance_non_venv_etc_dir: "/usr/local/etc/glance"
-glance_etc_dir: "{{ (glance_venv_enabled | bool) | ternary(glance_venv_etc_dir, glance_non_venv_etc_dir) }}"
+glance_etc_dir: "{{ glance_bin | dirname }}/etc/glance"
 
 glance_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/glance.tgz
 
