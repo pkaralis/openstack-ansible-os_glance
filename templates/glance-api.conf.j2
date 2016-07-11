@@ -23,10 +23,6 @@ enable_v1_registry = {{ glance_enable_v1_registry }}
 enable_v2_api = {{ glance_enable_v2_api }}
 enable_v2_registry = {{ glance_enable_v2_registry }}
 
-{% if glance_ceilometer_enabled %}
-notification_driver = messagingv2
-{% endif %}
-
 rpc_backend = {{ glance_rpc_backend }}
 
 delayed_delete = False
@@ -35,6 +31,11 @@ image_cache_dir = {{ glance_system_user_home }}/cache/
 
 # defaults to true if RBD is used as default store
 show_image_direct_url = {{ glance_show_image_direct_url }}
+
+{% if glance_ceilometer_enabled %}
+[oslo_messaging_notifications]
+driver = messagingv2
+{% endif %}
 
 [task]
 task_executor = {{ glance_task_executor }}
