@@ -21,3 +21,12 @@ This role will install the following Upstart services:
         external_lb_vip_address: 172.16.24.1
         internal_lb_vip_address: 192.168.0.1
         glance_galera_address: "{{ internal_lb_vip_address }}"
+
+Tags
+====
+
+This role supports two tags: ``glance-install`` and ``glance-config``
+
+The ``glance-install`` tag can be used to install and upgrade.
+
+The ``glance-config`` tag can be used to manage configuration.

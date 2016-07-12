@@ -37,17 +37,33 @@
     - always
 
 - include: glance_pre_install.yml
+  tags:
+    - glance-install
+
 - include: glance_install.yml
+  tags:
+    - glance-install
+
 - include: glance_post_install.yml
+  tags:
+    - glance-install
+    - glance-config
+
 - include: glance_init.yml
+  tags:
+    - glance-install
 
 - include: glance_db_setup.yml
   when: >
     inventory_hostname == groups['glance_all'][0]
+  tags:
+    - glance-install
 
 - include: glance_service_setup.yml
   when: >
     inventory_hostname == groups['glance_all'][0]
+  tags:
+    - glance-install
 
 - name: Flush handlers
   meta: flush_handlers

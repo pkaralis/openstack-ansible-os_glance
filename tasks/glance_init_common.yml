@@ -15,13 +15,9 @@
 
 - include: glance_init_upstart.yml
   when: pid1_name == "init"
-  tags:
-    - glance-init
 
 - include: glance_init_systemd.yml
   when: pid1_name == "systemd"
-  tags:
-    - glance-init
 
 - name: Load service
   service:

@@ -16,9 +16,6 @@
 - include: glance_install_apt.yml
   when:
     - ansible_pkg_mgr == 'apt'
-  tags:
-    - glance-install
-    - glance-apt-packages
 
 - name: Create developer mode constraint file
   copy:
@@ -29,9 +26,6 @@
       {% endfor %}
   when:
     - glance_developer_mode | bool
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Clone requirements git repository
   git:
@@ -42,28 +36,18 @@
     version: "{{ glance_requirements_git_install_branch }}"
   when:
     - glance_developer_mode | bool
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Add constraints to pip_install_options fact for developer mode
   set_fact:
     pip_install_options_fact: "{{ pip_install_options|default('') }} --constraint /opt/developer-pip-constraints.txt --constraint /opt/requirements/upper-constraints.txt"
   when:
     - glance_developer_mode | bool
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Set pip_install_options_fact when not in developer mode
   set_fact:
     pip_install_options_fact: "{{ pip_install_options|default('') }}"
   when:
     - not glance_developer_mode | bool
-  tags:
-    - glance-install
-    - glance-pip-packages
-
 
 - name: Install requires pip packages
   pip:
@@ -75,9 +59,6 @@
   retries: 5
   delay: 2
   with_items: "{{ glance_requires_pip_packages }}"
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Get local venv checksum
   stat:
@@ -86,9 +67,6 @@
   when:
     - not glance_developer_mode | bool
   register: local_venv_stat
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Get remote venv checksum
   uri:
@@ -97,9 +75,6 @@
   when:
     - not glance_developer_mode | bool
   register: remote_venv_checksum
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 # TODO: When project moves to ansible 2 we can pass this a sha256sum which will:
 #       a) allow us to remove force: yes
@@ -117,16 +92,10 @@
     - not glance_developer_mode | bool
     - (local_venv_stat.stat.exists == False or
         {{ local_venv_stat.stat.checksum is defined and local_venv_stat.stat.checksum != remote_venv_checksum.content | trim }})
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Set glance get_venv fact
   set_fact:
     glance_get_venv: "{{ get_venv }}"
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Remove existing venv
   file:
@@ -134,18 +103,12 @@
     state: absent
   when:
     - glance_get_venv | changed
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Create glance venv dir
   file:
     path: "{{ glance_bin | dirname }}"
     state: directory
   register: glance_venv_dir
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Unarchive pre-built venv
   unarchive:
@@ -157,9 +120,6 @@
     - glance_get_venv | changed or glance_venv_dir | changed
   notify:
     - Restart glance services
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Install pip packages
   pip:
@@ -177,9 +137,6 @@
     - glance_get_venv | failed or glance_developer_mode | bool
   notify:
     - Restart glance services
-  tags:
-    - glance-install
-    - glance-pip-packages
 
 - name: Update virtualenv path
   command: >
@@ -187,6 +144,3 @@
   when:
     - not glance_developer_mode | bool
     - glance_get_venv | success
-  tags:
-    - glance-install
-    - glance-pip-packages

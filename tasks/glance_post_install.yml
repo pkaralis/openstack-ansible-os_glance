@@ -70,17 +70,12 @@
   notify:
     - Restart glance api
     - Restart glance registry
-  tags:
-    - glance-config
 
 - name: Create nfs shares local path
   file:
     path: "{{ item.local_path }}"
     state: directory
   with_items: "{{ glance_nfs_client }}"
-  tags:
-    - glance-nfs
-    - glance-nfs-local-path
 
 - name: Glance mount nfs
   mount:
@@ -90,9 +85,6 @@
     opts: "{{ item.options }}"
     state: "mounted"
   with_items: "{{ glance_nfs_client }}"
-  tags:
-    - glance-nfs
-    - glance-nfs-local-path
 
 - name: Create glance cache management cron jobs
   cron:
@@ -110,5 +102,3 @@
     - name: "{{ glance_bin }}/glance-cache-cleaner"
       hour: "*/5"
   when: glance_flavor | search("cache")
-  tags:
-    - glance-cron
