@@ -22,6 +22,9 @@ glance_galera_address: 10.100.100.2
 glance_galera_database: glance
 glance_git_install_branch: master
 glance_profiler_hmac_key: "secrete"
+glance_rabbitmq_port: 5671
+glance_rabbitmq_servers: 10.100.100.2
+glance_rabbitmq_use_ssl: true
 glance_rabbitmq_password: "secrete"
 glance_rabbitmq_userid: glance
 glance_rabbitmq_vhost: /glance
@@ -57,6 +60,3 @@ memcached_servers: 127.0.0.1
 openrc_os_auth_url: "http://127.0.0.1:5000/v3"
 openrc_os_domain_name: "Default"
 openrc_os_password: "{{ keystone_auth_admin_password }}"
-rabbitmq_port: 5671
-rabbitmq_servers: 10.100.100.2
-rabbitmq_use_ssl: true
