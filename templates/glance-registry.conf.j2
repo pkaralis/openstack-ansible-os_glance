@@ -49,12 +49,12 @@ memcache_secret_key = {{ memcached_encryption_key }}
 check_revocations_for_cached = False
 
 [oslo_messaging_rabbit]
-rabbit_hosts = {{ rabbitmq_servers }}
-rabbit_port = {{ rabbitmq_port }}
+rabbit_hosts = {{ glance_rabbitmq_servers }}
+rabbit_port = {{ glance_rabbitmq_port }}
 rabbit_userid = {{ glance_rabbitmq_userid }}
 rabbit_password = {{ glance_rabbitmq_password }}
 rabbit_virtual_host = {{ glance_rabbitmq_vhost }}
-rabbit_use_ssl = {{ rabbitmq_use_ssl }}
+rabbit_use_ssl = {{ glance_rabbitmq_use_ssl }}
 rabbit_notification_exchange = glance
 rabbit_notification_topic = notifications
 

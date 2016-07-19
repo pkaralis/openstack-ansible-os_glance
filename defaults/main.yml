@@ -69,7 +69,9 @@ glance_enable_v2_registry: True
 ## RabbitMQ info
 glance_rabbitmq_userid: glance
 glance_rabbitmq_vhost: /glance
-
+glance_rabbitmq_port: 5672
+glance_rabbitmq_servers: 127.0.0.1
+glance_rabbitmq_use_ssl: False
 ## DB info
 glance_galera_database: glance
 glance_galera_user: glance
