@@ -24,6 +24,7 @@ enable_v2_api = {{ glance_enable_v2_api }}
 enable_v2_registry = {{ glance_enable_v2_registry }}
 
 rpc_backend = {{ glance_rpc_backend }}
+transport_url = rabbit://{% for host in glance_rabbitmq_servers.split(',') %}{{ glance_rabbitmq_userid }}:{{ glance_rabbitmq_password }}@{{ host }}:{{ glance_rabbitmq_port }}/{{ glance_rabbitmq_vhost }}?rabbit_use_ssl={{ glance_rabbitmq_use_ssl }},{% endfor %}
 
 delayed_delete = False
 scrub_time = 43200
@@ -31,11 +32,6 @@ image_cache_dir = {{ glance_system_user_home }}/cache/
 
 # defaults to true if RBD is used as default store
 show_image_direct_url = {{ glance_show_image_direct_url }}
-
-{% if glance_ceilometer_enabled %}
-[oslo_messaging_notifications]
-driver = messagingv2
-{% endif %}
 
 [task]
 task_executor = {{ glance_task_executor }}
@@ -73,14 +69,14 @@ policy_default_rule = {{ glance_policy_default_rule }}
 policy_dirs = {{ glance_policy_dirs }}
 
 [oslo_messaging_rabbit]
-rabbit_hosts = {{ glance_rabbitmq_servers }}
-rabbit_port = {{ glance_rabbitmq_port }}
-rabbit_userid = {{ glance_rabbitmq_userid }}
-rabbit_password = {{ glance_rabbitmq_password }}
-rabbit_virtual_host = {{ glance_rabbitmq_vhost }}
-rabbit_use_ssl = {{ glance_rabbitmq_use_ssl }}
 rabbit_notification_exchange = glance
 rabbit_notification_topic = notifications
+
+{% if glance_ceilometer_enabled %}
+[oslo_messaging_notifications]
+driver = messagingv2
+transport_url = rabbit://{% for host in glance_rabbitmq_telemetry_servers.split(',') %}{{ glance_rabbitmq_telemetry_userid }}:{{ glance_rabbitmq_telemetry_password }}@{{ host }}:{{ glance_rabbitmq_telemetry_port }}/{{ glance_rabbitmq_telemetry_vhost }}?rabbit_use_ssl={{ glance_rabbitmq_telemetry_use_ssl }},{% endfor %}
+{% endif %}
 
 [paste_deploy]
 flavor = {{ glance_flavor }}

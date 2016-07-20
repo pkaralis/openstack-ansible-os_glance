@@ -67,11 +67,21 @@ glance_enable_v2_api: True
 glance_enable_v2_registry: True
 
 ## RabbitMQ info
+
+## Configuration for RPC communications
 glance_rabbitmq_userid: glance
 glance_rabbitmq_vhost: /glance
 glance_rabbitmq_port: 5672
 glance_rabbitmq_servers: 127.0.0.1
 glance_rabbitmq_use_ssl: False
+
+## Configuration for notifications communication, i.e. [oslo_messaging_notifications]
+glance_rabbitmq_telemetry_userid: "{{ glance_rabbitmq_userid }}"
+glance_rabbitmq_telemetry_vhost: "{{ glance_rabbitmq_vhost }}"
+glance_rabbitmq_telemetry_port: "{{ glance_rabbitmq_port }}"
+glance_rabbitmq_telemetry_servers: "{{ glance_rabbitmq_servers }}"
+glance_rabbitmq_telemetry_use_ssl: "{{ glance_rabbitmq_use_ssl }}"
+
 ## DB info
 glance_galera_database: glance
 glance_galera_user: glance
