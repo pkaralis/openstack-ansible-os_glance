@@ -77,6 +77,7 @@ glance_rabbitmq_use_ssl: False
 
 ## Configuration for notifications communication, i.e. [oslo_messaging_notifications]
 glance_rabbitmq_telemetry_userid: "{{ glance_rabbitmq_userid }}"
+glance_rabbitmq_telemetry_password: "{{ glance_rabbitmq_password }}"
 glance_rabbitmq_telemetry_vhost: "{{ glance_rabbitmq_vhost }}"
 glance_rabbitmq_telemetry_port: "{{ glance_rabbitmq_port }}"
 glance_rabbitmq_telemetry_servers: "{{ glance_rabbitmq_servers }}"
