@@ -1,5 +1,5 @@
 ---
-# Copyright 2014, Rackspace US, Inc.
+# Copyright 2016, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,30 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-galaxy_info:
-  author: rcbops
-  description: Installation and setup of glance
-  company: Rackspace
-  license: Apache2
-  min_ansible_version: 1.9
-  platforms:
-    - name: Ubuntu
-      versions:
-        - trusty
-        - xenial
-    - name: EL
-      versions:
-        - 7
-  categories:
-    - cloud
-    - python
-    - glance
-    - development
-    - openstack
-dependencies:
-  - pip_install
-  - role: apt_package_pinning
-    when:
-      - ansible_pkg_mgr == 'apt'
-  - galera_client
-  - openstack_openrc
+- name: Install yum packages
+  yum:
+    pkg: "{{ item }}"
+    state: "{{ glance_package_state }}"
+  register: install_packages
+  until: install_packages|success
+  retries: 5
+  delay: 2
+  with_items: "{{ glance_distro_packages }}"

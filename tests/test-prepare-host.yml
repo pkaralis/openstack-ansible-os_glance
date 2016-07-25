@@ -16,6 +16,11 @@
 - name: Perform basic LXC host setup
   hosts: localhost
   pre_tasks:
+    - name: Ensure apt cache is always refreshed
+      apt:
+        update_cache: yes
+      when:
+        - ansible_pkg_mgr == 'apt'
     - name: Ensure root's new public ssh key is in authorized_keys
       authorized_key:
         user: root
@@ -31,7 +36,13 @@
       set_fact:
         lxc_container_cache_files:
           - { src: '/etc/pip.conf', dest: '/etc/pip.conf' }
-      when: nodepool.stat.exists | bool
+      when:
+        - nodepool.stat.exists | bool
+    - name: install the epel repo rpm from a remote repo
+      yum:
+        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+        state: "present"
+      when: ansible_pkg_mgr == 'yum'
   roles:
     - role: "lxc_hosts"
       lxc_net_address: 10.100.100.1
