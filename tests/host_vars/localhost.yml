@@ -13,14 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-container_name: "{{ inventory_hostname }}"
-container_networks:
-  management_address:
-    address: "{{ ansible_host }}"
-    bridge: "lxcbr0"
-    interface: "eth1"
-    netmask: "255.255.252.0"
-    type: "veth"
-physical_host: localhost
-properties:
-  service_name: "{{ inventory_hostname }}"
+bridges:
+  - "br-mgmt"
+
+ansible_python_interpreter: "/usr/bin/python2"
