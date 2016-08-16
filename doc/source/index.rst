@@ -1,18 +1,28 @@
-=================================
-Glance role for OpenStack-Ansible
-=================================
+=============================
+OpenStack-Ansible glance role
+=============================
 
 .. toctree::
    :maxdepth: 2
 
    configure-glance.rst
 
-:tags: openstack, glance, cloud, ansible
-:category: \*nix
+This role installs the following Upstart services:
 
-This role will install the following Upstart services:
     * glance-api
     * glance-registry
+
+Default variables
+~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../defaults/main.yml
+   :language: yaml
+   :start-after: under the License.
+
+Required variables
+~~~~~~~~~~~~~~~~~~
+
+None
 
 Example playbook
 ~~~~~~~~~~~~~~~~
@@ -23,8 +33,9 @@ Example playbook
 Tags
 ~~~~
 
-This role supports two tags: ``glance-install`` and ``glance-config``
+This role supports two tags: ``glance-install`` and ``glance-config``.
+The ``glance-install`` tag can be used to install and upgrade. The
+``glance-config`` tag can be used to manage configuration.
 
-The ``glance-install`` tag can be used to install and upgrade.
-
-The ``glance-config`` tag can be used to manage configuration.
+:tags: openstack, glance, cloud, ansible
+:category: \*nix

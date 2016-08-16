@@ -16,10 +16,10 @@ file-based storage by default. Two additional stores, ``http`` and ``cinder``
 (Block Storage), are also enabled by default.
 
 You can choose alternative default stores and alternative additional stores.
-For example, a deployer that uses Ceph may configure the following Ansible
+For example, a deployer that uses Ceph can configure the following Ansible
 variables:
 
-.. code-block:: yaml
+ .. code-block:: yaml
 
     glance_default_store = rbd
     glance_additional_stores:
@@ -39,7 +39,7 @@ account for the ``images`` pool.
 
 In ``user_variables.yml``:
 
-   .. code-block:: yaml
+ .. code-block:: yaml
 
     glance_default_store: rbd
     ceph_mons:
@@ -50,11 +50,11 @@ In ``user_variables.yml``:
 
 You can use the following variables if you are not using the defaults:
 
-    .. code-block:: yaml
+ .. code-block:: yaml
 
-     glance_ceph_client: <glance-username>
-     glance_rbd_store_pool: <glance-pool-name>
-     glance_rbd_store_chunk_size: <chunk-size>
+    glance_ceph_client: <glance-username>
+    glance_rbd_store_pool: <glance-pool-name>
+    glance_rbd_store_chunk_size: <chunk-size>
 
 
 Storing images in Cloud Files
@@ -69,35 +69,35 @@ usage.
 
    .. code-block:: yaml
 
-       glance_default_store: swift
+      glance_default_store: swift
 
 #. Set the appropriate authentication URL and version:
 
    .. code-block:: yaml
 
-       glance_swift_store_auth_version: 2
-       glance_swift_store_auth_address: https://127.0.0.1/v2.0
+      glance_swift_store_auth_version: 2
+      glance_swift_store_auth_address: https://127.0.0.1/v2.0
 
 #. Set the swift account credentials:
 
    .. code-block:: yaml
 
-       # Replace this capitalized variables with actual data.
-       glance_swift_store_user: GLANCE_SWIFT_TENANT:GLANCE_SWIFT_USER
-       glance_swift_store_key: SWIFT_PASSWORD_OR_KEY
+      # Replace this capitalized variables with actual data.
+      glance_swift_store_user: GLANCE_SWIFT_TENANT:GLANCE_SWIFT_USER
+      glance_swift_store_key: SWIFT_PASSWORD_OR_KEY
 
 #. Change the ``glance_swift_store_endpoint_type`` from the default
    ``internalURL`` settings to ``publicURL`` if needed.
 
    .. code-block:: yaml
 
-       glance_swift_store_endpoint_type: publicURL
+      glance_swift_store_endpoint_type: publicURL
 
 #. Define the store name:
 
    .. code-block:: yaml
 
-       glance_swift_store_container: STORE_NAME
+      glance_swift_store_container: STORE_NAME
 
    Replace ``STORE_NAME`` with the container name in swift to be
    used for storing images. If the container does not exist, it is
@@ -107,7 +107,7 @@ usage.
 
    .. code-block:: yaml
 
-       glance_swift_store_region: STORE_REGION
+      glance_swift_store_region: STORE_REGION
 
    Replace ``STORE_REGION`` if needed.
 
@@ -115,7 +115,7 @@ usage.
 
    .. code-block:: yaml
 
-       glance_flavor: GLANCE_FLAVOR
+      glance_flavor: GLANCE_FLAVOR
 
    By default, glance uses caching and authenticates with the
    Identity (keystone) service. The default maximum size of the image cache is 10GB.
@@ -127,14 +127,14 @@ usage.
 
    .. code-block:: yaml
 
-       glance_flavor: keystone
+      glance_flavor: keystone
 
    Or, to disable both authentication and caching, set
    ``GLANCE_FLAVOR`` to no value:
 
    .. code-block:: yaml
 
-       glance_flavor:
+      glance_flavor:
 
    This option is set by default to use authentication and cache
    management in the ``playbooks/roles/os_glance/defaults/main.yml``
