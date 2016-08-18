@@ -37,5 +37,3 @@ This role supports two tags: ``glance-install`` and ``glance-config``.
 The ``glance-install`` tag can be used to install and upgrade. The
 ``glance-config`` tag can be used to manage configuration.
 
-:tags: openstack, glance, cloud, ansible
-:category: \*nix
