@@ -16,7 +16,7 @@
 cache_timeout: 600
 
 # Common apt packages
-glance_apt_packages:
+glance_distro_packages:
   - rpcbind
   - rsync
   - git
