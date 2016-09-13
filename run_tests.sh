@@ -53,3 +53,4 @@ for tox_env in $(awk -F= '/envlist/ {print $2}' tox.ini | sed 's/,/ /g'); do
     fi
   fi
 done
+
