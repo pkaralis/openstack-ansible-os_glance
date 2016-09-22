@@ -55,14 +55,14 @@
     - glance-install
 
 - include: glance_db_setup.yml
-  when: >
-    inventory_hostname == groups['glance_all'][0]
+  static: no
+  when: inventory_hostname == groups['glance_all'][0]
   tags:
     - glance-install
 
 - include: glance_service_setup.yml
-  when: >
-    inventory_hostname == groups['glance_all'][0]
+  static: no
+  when: inventory_hostname == groups['glance_all'][0]
   tags:
     - glance-install
 
