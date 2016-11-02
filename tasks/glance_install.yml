@@ -30,36 +30,15 @@
       {% for item in glance_developer_constraints %}
       {{ item }}
       {% endfor %}
-  when:
-    - glance_developer_mode | bool
-
-- name: Clone requirements git repository
-  git:
-    repo: "{{ glance_requirements_git_repo }}"
-    dest: "/opt/requirements"
-    clone: yes
-    update: yes
-    version: "{{ glance_requirements_git_install_branch }}"
-  when:
-    - glance_developer_mode | bool
-
-- name: Add constraints to pip_install_options fact for developer mode
-  set_fact:
-    pip_install_options_fact: "{{ pip_install_options|default('') }} --constraint /opt/developer-pip-constraints.txt --constraint /opt/requirements/upper-constraints.txt"
-  when:
-    - glance_developer_mode | bool
-
-- name: Set pip_install_options_fact when not in developer mode
-  set_fact:
-    pip_install_options_fact: "{{ pip_install_options|default('') }}"
-  when:
-    - not glance_developer_mode | bool
+  when: glance_developer_mode | bool
 
 - name: Install requires pip packages
   pip:
     name: "{{ glance_requires_pip_packages | join(' ') }}"
     state: latest
-    extra_args: "{{ pip_install_options_fact }}"
+    extra_args: >-
+      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
+      {{ pip_install_options | default('') }}
   register: install_packages
   until: install_packages|success
   retries: 5
@@ -132,7 +111,10 @@
     state: latest
     virtualenv: "{{ glance_bin | dirname }}"
     virtualenv_site_packages: "no"
-    extra_args: "{{ pip_install_options_fact }}"
+    extra_args: >-
+      {{ glance_developer_mode | ternary('--constraint /opt/developer-pip-constraints.txt', '') }}
+      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
+      {{ pip_install_options | default('') }}
   register: install_packages
   until: install_packages|success
   retries: 5
