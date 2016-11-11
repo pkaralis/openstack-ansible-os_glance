@@ -23,12 +23,7 @@
     # of venv to be usable by Ansible
     - name: Install testing pip packages
       pip:
-        name: "{{ item }}"
-      with_items:
-        - python-glanceclient
-        - python-keystoneclient
-        - httplib2
-        - pyyaml
+        name: "shade"
 
     - name: Check the glance-api
       uri:
@@ -40,24 +35,25 @@
         url: "http://localhost:9191"
         status_code: 401
 
+    - name: Download the Cirros image
+      get_url:
+        url: "http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-uec.tar.gz"
+        dest: "/var/tmp/cirros.tar.gz"
+
     - name: Upload the Cirros image
-      glance:
-        command: 'image-create'
-        openrc_path: /root/openrc
-        image_name: cirros
-        image_url: "http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-uec.tar.gz"
-        image_container_format: bare
-        image_disk_format: qcow2
-        image_is_public: True
+      os_image:
+        cloud: default
+        endpoint_type: internal
+        validate_certs: "{{ keystone_service_internaluri_insecure | ternary(false, true) }}"
+        name: cirros
+        filename: "/var/tmp/cirros.tar.gz"
+        container_format: bare
+        disk_format: qcow2
+        is_public: True
       register: cirros_image_create
       until: cirros_image_create | success
       retries: 5
       delay: 15
-
-    - name: Ensure image uploaded
-      fail:
-        msg: "Image upload failed"
-      when: (glance_images is not defined) or (glance_images.cirros is not defined) or (glance_images.cirros.id is not defined)
 
   vars_files:
     - common/test-vars.yml
