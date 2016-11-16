@@ -95,7 +95,7 @@
 
 - name: Update virtualenv path
   command: >
-    virtualenv-tools --update-path=auto {{ glance_bin | dirname }}
+    virtualenv-tools --update-path=auto --reinitialize {{ glance_bin | dirname }}
   when:
     - not glance_developer_mode | bool
     - glance_get_venv | changed or glance_venv_dir | changed
