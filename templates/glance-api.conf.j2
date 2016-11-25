@@ -98,7 +98,7 @@ filesystem_store_datadir = {{ glance_system_user_home }}/images/
 {% if 'swift' in glance_available_stores %}
 swift_store_config_file = /etc/glance/glance-swift-store.conf
 default_swift_reference = swift1
-swift_store_auth_insecure = {{ keystone_service_internaluri_insecure | bool }}
+swift_store_auth_insecure = {{ glance_swift_store_auth_insecure | bool }}
 swift_store_region = {{ glance_swift_store_region }}
 swift_store_container = {{ glance_swift_store_container }}
 swift_store_create_container_on_put = True
