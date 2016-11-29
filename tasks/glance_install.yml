@@ -100,6 +100,15 @@
   notify:
     - Restart glance services
 
+- name: CentOS remove python from path first
+  file:
+    path:  "{{ glance_bin | dirname }}/bin/python2.7"
+    state: "absent"
+  when:
+    - ansible_pkg_mgr == 'yum'
+    - not glance_developer_mode | bool
+    - glance_get_venv | changed or glance_venv_dir | changed
+
 - name: Update virtualenv path
   command: >
     virtualenv-tools --update-path=auto --reinitialize {{ glance_bin | dirname }}
