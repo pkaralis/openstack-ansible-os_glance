@@ -7,7 +7,7 @@ OpenStack-Ansible glance role
 
    configure-glance.rst
 
-This role installs the following Upstart services:
+This role installs the following Systemd services:
 
     * glance-api
     * glance-registry

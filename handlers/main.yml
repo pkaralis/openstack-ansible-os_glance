@@ -18,16 +18,9 @@
   notify:
     - Restart glance services
 
-- name: Reload upstart init scripts
-  command: initctl reload-configuration
-  changed_when: false
-  notify:
-    - Restart glance services
-
 - name: Restart glance services
   service:
     name: "{{ item.value.service_name }}"
     state: "restarted"
-    pattern: "{{ item.value.service_name }}"
   with_dict: "{{ glance_services }}"
   when: inventory_hostname in groups[item.value.group]
