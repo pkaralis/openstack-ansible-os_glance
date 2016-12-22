@@ -12,6 +12,9 @@ This role installs the following Systemd services:
     * glance-api
     * glance-registry
 
+To clone or view the source code for this repository, visit the role repository
+for `os_glance <https://github.com/openstack/openstack-ansible-os_glance>`_.
+
 Default variables
 ~~~~~~~~~~~~~~~~~
 
