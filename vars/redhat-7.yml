@@ -19,3 +19,4 @@ glance_distro_packages:
   - rsync
   - git
   - nfs-utils
+  - which
