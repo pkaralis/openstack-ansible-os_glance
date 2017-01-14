@@ -57,7 +57,7 @@
     dest: "/var/cache/{{ glance_venv_download_url | basename }}"
     checksum: "sha1:{{ lookup('url', glance_venv_download_url | replace('tgz', 'checksum')) }}"
   register: glance_get_venv
-  when: not glance_developer_mode | bool
+  when: glance_venv_download | bool
 
 - name: Remove existing venv
   file:
@@ -70,15 +70,14 @@
     path: "{{ glance_bin | dirname }}"
     state: directory
   register: glance_venv_dir
+  when: glance_get_venv | changed
 
 - name: Unarchive pre-built venv
   unarchive:
     src: "/var/cache/{{ glance_venv_download_url | basename }}"
     dest: "{{ glance_bin | dirname }}"
     copy: "no"
-  when:
-    - not glance_developer_mode | bool
-    - glance_get_venv | changed or glance_venv_dir | changed
+  when: glance_get_venv | changed
   notify:
     - Restart glance services
 
@@ -96,7 +95,7 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  when: glance_developer_mode | bool
+  when: glance_get_venv | failed or glance_get_venv | skipped
   notify:
     - Restart glance services
 
@@ -106,12 +105,9 @@
     state: "absent"
   when:
     - ansible_pkg_mgr == 'yum'
-    - not glance_developer_mode | bool
-    - glance_get_venv | changed or glance_venv_dir | changed
+    - glance_get_venv | changed
 
 - name: Update virtualenv path
   command: >
     virtualenv-tools --update-path=auto --reinitialize {{ glance_bin | dirname }}
-  when:
-    - not glance_developer_mode | bool
-    - glance_get_venv | changed or glance_venv_dir | changed
+  when: glance_get_venv | changed

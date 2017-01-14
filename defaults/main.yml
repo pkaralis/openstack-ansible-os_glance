@@ -37,6 +37,9 @@ glance_bin: "/openstack/venvs/glance-{{ glance_venv_tag }}/bin"
 #  glance_etc_dir: "/usr/local/etc/glance"
 glance_etc_dir: "{{ glance_bin | dirname }}/etc/glance"
 
+# venv_download, even when true, will use the fallback method of building the
+# venv from scratch if the venv download fails.
+glance_venv_download: "{{ not glance_developer_mode | bool }}"
 glance_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/glance.tgz
 
 # Enable/Disable Ceilometer
