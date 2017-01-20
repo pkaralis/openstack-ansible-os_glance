@@ -22,6 +22,9 @@
 # Install Keystone
 - include: common/test-install-keystone.yml
 
+# Install previous version of Glance
+- include: test-install-previous-glance.yml
+
 # Install Glance
 - include: common/test-install-glance.yml
 
