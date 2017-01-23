@@ -63,4 +63,4 @@
   with_dict: "{{ glance_services }}"
   when: inventory_hostname in groups[item.value.group]
   notify:
-    - Reload systemd daemon
+    - Restart glance services
