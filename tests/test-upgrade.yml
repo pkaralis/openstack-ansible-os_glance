@@ -24,8 +24,3 @@
 
 # Install previous version of Glance
 - include: test-install-previous-glance.yml
-
-# Install Glance
-- include: common/test-install-glance.yml
-
-- include: test-glance-functional.yml
