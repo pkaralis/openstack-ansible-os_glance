@@ -1,8 +1,5 @@
 # {{ ansible_managed }}
 
-{% set _api_threads = ansible_processor_vcpus|default(2) // 2 %}
-{% set api_threads = _api_threads if _api_threads > 0 else 1 %}
-
 [DEFAULT]
 # Disable stderr logging
 use_stderr = False
@@ -13,7 +10,7 @@ bind_host = {{ glance_registry_bind_address }}
 bind_port = {{ glance_registry_service_port }}
 http_keepalive = {{ glance_http_keepalive }}
 backlog = 4096
-workers = {{ glance_registry_workers | default(api_threads) }}
+workers = {{ glance_registry_workers | default(glance_api_threads) }}
 api_limit_max = 1000
 limit_param_default = 25
 
