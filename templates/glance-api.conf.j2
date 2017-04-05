@@ -110,3 +110,8 @@ rbd_store_chunk_size = {{ glance_rbd_store_chunk_size }}
 
 [profiler]
 enabled = {{ glance_profiler_enabled }}
+
+{% if glance_proxy_headers_parsing | bool %}
+[oslo_middleware]
+enable_proxy_headers_parsing = True
+{% endif %}
