@@ -44,7 +44,7 @@
   tags:
     - glance-config
 
-- include: glance_init_common.yml
+- include: "glance_init_{{ ansible_service_mgr }}.yml"
   tags:
     - glance-config
 
