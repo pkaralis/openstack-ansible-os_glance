@@ -52,6 +52,8 @@
     group: "root"
   with_dict: "{{ glance_services }}"
   when: inventory_hostname in groups[item.value.group]
+  notify:
+    - Restart glance services
 
 - name: Place the systemd init script
   template:
