@@ -56,7 +56,7 @@
       config_overrides: "{{ glance_glance_swift_store_conf_overrides }}"
       config_type: "ini"
     - src: "policy.json.j2"
-      dest: "/etc/glance/policy.json"
+      dest: "/etc/glance/policy.json-{{ glance_venv_tag }}"
       config_overrides: "{{ glance_policy_overrides }}"
       config_type: "json"
     - src: "schema.json.j2"
