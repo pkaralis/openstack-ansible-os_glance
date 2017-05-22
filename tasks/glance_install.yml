@@ -99,3 +99,10 @@
   when:
     - not glance_developer_mode | bool
     - glance_get_venv | changed or glance_venv_dir | changed
+
+- name: Record the venv tag deployed
+  ini_file:
+    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+    section: glance
+    option: venv_tag
+    value: "{{ glance_venv_tag }}"
