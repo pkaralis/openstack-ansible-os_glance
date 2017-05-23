@@ -47,6 +47,9 @@
   copy:
     src: "/etc/glance/policy.json-{{ glance_venv_tag }}"
     dest: "/etc/glance/policy.json"
+    owner: "root"
+    group: "{{ glance_system_group_name }}"
+    mode: "0640"
     remote_src: yes
 
 - name: Start services
