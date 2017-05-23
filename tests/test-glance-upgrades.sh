@@ -77,23 +77,23 @@ source "${COMMON_TESTS_PATH}/test-ansible-env-prep.sh"
 # Set gate job exit traps, this is run regardless of exit state when the job finishes.
 trap gate_job_exit_tasks EXIT
 
-# Prepare environment for the initial deploy of previous Cinder
+# Prepare environment for the initial deploy of previous Glance
 # No upgrading or testing is done yet.
-export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-cinder-install.log"
+export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-glance-install.log"
 
-# Execute the setup of previous Cinder
+# Execute the setup of previous Glance
 execute_ansible_playbook
 
-# Prepare environment for the upgrade of Cinder
+# Prepare environment for the upgrade of Glance
 export TEST_PLAYBOOK="${COMMON_TESTS_PATH}/test-install-glance.yml"
 export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-glance-upgrade.log"
 
-# Excute the upgrade of Cinder
+# Excute the upgrade of Glance
 execute_ansible_playbook
 
-# Prepare the environment for the testing of upgraded Cinder
+# Prepare the environment for the testing of upgraded Glance
 export TEST_PLAYBOOK="${WORKING_DIR}/tests/test-glance-functional.yml"
-export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-cinder-upgrade-test.log"
+export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-glance-upgrade-test.log"
 
-# Execute testing of upgraded Cinder
+# Execute testing of upgraded Glance
 execute_ansible_playbook
