@@ -41,7 +41,7 @@ memcache_security_strategy = ENCRYPT
 memcache_secret_key = {{ memcached_encryption_key }}
 
 [oslo_messaging_rabbit]
-rabbit_use_ssl = {{ glance_rabbitmq_use_ssl }}
+ssl = {{ glance_rabbitmq_use_ssl }}
 rabbit_notification_exchange = glance
 rabbit_notification_topic = notifications
 
