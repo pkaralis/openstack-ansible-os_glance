@@ -42,6 +42,8 @@ export TEST_CHECK_MODE=${TEST_CHECK_MODE:-false}
 export TEST_IDEMPOTENCE=${TEST_IDEMPOTENCE:-false}
 
 export COMMON_TESTS_PATH="${WORKING_DIR}/tests/common"
+export OSA_OPS_DIR="${WORKING_DIR}/openstack-ansible-ops"
+export BOWLING_BALL_DIR="${OSA_OPS_DIR}/bowling_ball"
 
 echo "ANSIBLE_OVERRIDES: ${ANSIBLE_OVERRIDES}"
 echo "ANSIBLE_PARAMETERS: ${ANSIBLE_PARAMETERS}"
@@ -85,7 +87,7 @@ export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-glance-install.log"
 execute_ansible_playbook
 
 # Prepare environment for the upgrade of Glance
-export TEST_PLAYBOOK="${COMMON_TESTS_PATH}/test-install-glance.yml"
+export TEST_PLAYBOOK="${WORKING_DIR}/tests/benchmark-upgrade.yml"
 export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-glance-upgrade.log"
 
 # Excute the upgrade of Glance
