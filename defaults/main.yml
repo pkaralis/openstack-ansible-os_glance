@@ -209,10 +209,10 @@ glance_requires_pip_packages:
 
 # Common pip packages
 glance_pip_packages:
-  - keystonemiddleware
+  - cryptography
   - glance
+  - keystonemiddleware
   - os-brick
-  - pycrypto
   - PyMySQL
   - python-cinderclient
   - python-glanceclient
