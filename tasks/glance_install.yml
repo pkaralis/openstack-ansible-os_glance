@@ -15,7 +15,7 @@
 
 - name: Install distro packages
   package:
-    name: "{{ item }}"
+    name: "{{ glance_distro_packages }}"
     state: "{{ glance_package_state }}"
     update_cache: "{{ (ansible_pkg_mgr == 'apt') | ternary('yes', omit) }}"
     cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
@@ -23,7 +23,6 @@
   until: install_packages|success
   retries: 5
   delay: 2
-  with_items: "{{ glance_distro_packages }}"
 
 - name: Create developer mode constraint file
   copy:
