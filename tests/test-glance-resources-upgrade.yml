@@ -26,8 +26,9 @@
       pip:
         name: "{{ item }}"
       with_items:
-        - python-keystoneclient
         - python-glanceclient
+        - python-keystoneclient
+        - python-openstacksdk
     - name: Run rolling test script
       command: ./openstack-ansible-ops/bowling_ball/rolling_tests.py glance
       args:
