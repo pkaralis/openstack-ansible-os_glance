@@ -113,6 +113,16 @@
     virtualenv-tools --update-path=auto --reinitialize {{ glance_bin | dirname }}
   when: glance_get_venv | changed
 
+- name: Record the need for a service restart
+  ini_file:
+    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+    section: glance
+    option: need_service_restart
+    value: True
+  when: glance_get_venv | changed or
+        glance_venv_dir | changed or
+        install_packages | changed
+
 - name: Record the venv tag deployed
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
