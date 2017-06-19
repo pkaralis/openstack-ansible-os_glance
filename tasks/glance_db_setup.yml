@@ -13,14 +13,43 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Perform a Glance DB sync
-  command: "{{ glance_bin }}/glance-manage db_sync"
+- name: Check Glance DB version
+  command: "{{ glance_bin }}/glance-manage db version"
   become: yes
   become_user: "{{ glance_system_user_name }}"
+  register: db_version
   changed_when: false
 
-- name: Load glance metadata definitions
-  command: "{{ glance_bin }}/glance-manage db_load_metadefs {{ glance_etc_dir }}/metadefs"
+# We only set to minor here if the version_compare filter passes, and we make
+# sure that can't be accessed unless there's actually a '.' in the version.
+# Passing in 'major' or 'testing' to version_compare causes a Jinja error.
+- name: Determine whether a major or minor release was installed
+  set_fact:
+    upgrade_type: |-
+        {% set existing = glance_venv_tag %}
+        {% set upgrade_type = 'major' %}
+        {% if '.' in existing %}
+        {%  set existing_major = existing.split('.')[0] %}
+        {%  set venv_major = glance_venv_tag.split('.')[0] %}
+        {%  if existing_major != venv_major %}
+        {%    set upgrade_type = 'major' %}
+        {%  elif existing | version_compare(glance_venv_tag, '!=', strict=True) %}
+        {%    set upgrade_type = 'minor' %}
+        {%  endif %}
+        {% endif %}
+        {{ upgrade_type }}
+  delegate_to: localhost
+
+- name: Perform a Glance DB sync
+  command: "{{ glance_bin }}/glance-manage db sync"
+  changed_when: false
   become: yes
   become_user: "{{ glance_system_user_name }}"
+  when: upgrade_type == 'major' or db_version.stdout.startswith('Database is either not under migration control')
+
+- name: Load glance metadata definitions
+  command: "{{ glance_bin }}/glance-manage db load_metadefs"
   changed_when: false
+  become: yes
+  become_user: "{{ glance_system_user_name }}"
+  when: upgrade_type == 'major' or db_version.stdout.startswith('Database is either not under migration control')
