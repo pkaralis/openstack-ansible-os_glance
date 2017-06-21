@@ -56,7 +56,6 @@ glance_system_comment: glance system user
 glance_system_user_home: "/var/lib/{{ glance_system_user_name }}"
 
 glance_registry_host: "{{ internal_lb_vip_address }}"
-glance_rpc_backend: glance.openstack.common.rpc.impl_kombu
 glance_default_store: file
 glance_additional_stores:
   - http

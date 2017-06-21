@@ -22,7 +22,6 @@ enable_v1_registry = {{ glance_enable_v1_registry }}
 enable_v2_api = {{ glance_enable_v2_api }}
 enable_v2_registry = {{ glance_enable_v2_registry }}
 
-rpc_backend = {{ glance_rpc_backend }}
 transport_url = rabbit://{% for host in glance_rabbitmq_servers.split(',') %}{{ glance_rabbitmq_userid }}:{{ glance_rabbitmq_password }}@{{ host }}:{{ glance_rabbitmq_port }}{% if not loop.last %},{% else %}/{{ glance_rabbitmq_vhost }}{% endif %}{% endfor %}
 
 delayed_delete = False
