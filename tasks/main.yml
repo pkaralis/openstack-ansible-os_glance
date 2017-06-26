@@ -33,6 +33,13 @@
   tags:
     - glance-install
 
+- name: refresh local facts
+  setup:
+    filter: ansible_local
+    gather_subset: "!all"
+  tags:
+    - glance-config
+
 - include: glance_post_install.yml
   tags:
     - glance-config
@@ -42,12 +49,19 @@
     - glance-config
 
 - include: glance_db_setup.yml
-  when: inventory_hostname == groups['glance_all'][0]
+  run_once: true
   tags:
     - glance-config
 
 - include: glance_service_setup.yml
-  when: inventory_hostname == groups['glance_all'][0]
+  run_once: true
+  tags:
+    - glance-config
+
+- name: refresh local facts
+  setup:
+    filter: ansible_local
+    gather_subset: "!all"
   tags:
     - glance-config
 
