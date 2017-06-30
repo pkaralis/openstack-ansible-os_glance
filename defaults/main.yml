@@ -221,10 +221,12 @@ glance_services:
     group: glance_api
     service_name: glance-api
     init_config_overrides: "{{ glance_api_init_overrides }}"
+    start_order: 1
   glance-registry:
     group: glance_registry
     service_name: glance-registry
     init_config_overrides: "{{ glance_registry_init_overrides }}"
+    start_order: 2
 
 # This variable is used by the repo_build process to determine
 # which host group to check for members of before building the

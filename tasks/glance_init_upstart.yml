@@ -16,11 +16,10 @@
 - name: Place the init script
   template:
     src: "glance-upstart-init.j2"
-    dest: "/etc/init/{{ item.value.service_name }}.conf"
+    dest: "/etc/init/{{ item.service_name }}.conf"
     mode: "0644"
     owner: "root"
     group: "root"
-  with_dict: "{{ glance_services }}"
-  when: inventory_hostname in groups[item.value.group]
+  with_items: "{{ filtered_glance_services }}"
   notify:
     - Reload upstart init scripts
