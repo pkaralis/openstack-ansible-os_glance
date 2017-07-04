@@ -49,19 +49,18 @@
     - glance-config
 
 - include: glance_db_setup.yml
-  run_once: true
+  static: no
+  when:
+    - "'glance_api' in group_names"
+    - "inventory_hostname == (groups['glance_api'] | intersect(ansible_play_hosts))[0]"
   tags:
     - glance-config
 
 - include: glance_service_setup.yml
-  run_once: true
-  tags:
-    - glance-config
-
-- name: refresh local facts
-  setup:
-    filter: ansible_local
-    gather_subset: "!all"
+  static: no
+  when:
+    - "'glance_api' in group_names"
+    - "inventory_hostname == (groups['glance_api'] | intersect(ansible_play_hosts))[0]"
   tags:
     - glance-config
 
