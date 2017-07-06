@@ -52,7 +52,7 @@
   static: no
   when:
     - "'glance_api' in group_names"
-    - "inventory_hostname == ansible_play_hosts[0]"
+    - "inventory_hostname == (groups['glance_api'] | intersect(ansible_play_hosts))[0]"
   tags:
     - glance-config
 
@@ -60,7 +60,7 @@
   static: no
   when:
     - "'glance_api' in group_names"
-    - "inventory_hostname == ansible_play_hosts[0]"
+    - "inventory_hostname == (groups['glance_api'] | intersect(ansible_play_hosts))[0]"
   tags:
     - glance-config
 
