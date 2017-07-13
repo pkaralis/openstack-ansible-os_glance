@@ -57,5 +57,17 @@
   tags:
     - glance-config
 
+- name: Include ceph_client role
+  include_role:
+    name: ceph_client
+  vars:
+    openstack_service_system_user: "{{ glance_system_user_name }}"
+    openstack_service_venv_bin: "{{ glance_bin }}"
+  when:
+    - "'glance_api' in group_names"
+    - "'rbd' in ([glance_default_store] + glance_additional_stores)"
+  tags:
+    - ceph
+
 - name: Flush handlers
   meta: flush_handlers
