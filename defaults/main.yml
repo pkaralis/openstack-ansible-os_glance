@@ -218,6 +218,7 @@ glance_pip_packages:
   - python-keystoneclient
   - python-memcached
   - python-swiftclient
+  - uwsgi
   - warlock
 
 glance_api_init_overrides: {}
@@ -230,11 +231,24 @@ glance_services:
     service_name: glance-api
     init_config_overrides: "{{ glance_api_init_overrides }}"
     start_order: 1
+    wsgi_overrides: "{{ glance_api_uwsgi_ini_overrides }}"
+    wsgi_app: True
+    log_string: "--logto "
+    wsgi_name: glance-wsgi-api
+    uwsgi_bind_address: "{{glance_api_bind_address }}"
+    uwsgi_port: "{{ glance_api_service_port }}"
+    program_override: "{{ glance_bin }}/uwsgi --ini /etc/uwsgi/glance-api.ini"
   glance-registry:
     group: glance_registry
     service_name: glance-registry
     init_config_overrides: "{{ glance_registry_init_overrides }}"
     start_order: 2
+
+# Glance uWSGI settings
+glance_wsgi_processes_max: 16
+glance_wsgi_processes: "{{ [[ansible_processor_vcpus|default(1), 1] | max * 2, glance_wsgi_processes_max] | min }}"
+glance_wsgi_threads: 1
+glance_wsgi_buffer_size: 65535
 
 # This variable is used by the repo_build process to determine
 # which host group to check for members of before building the
@@ -253,3 +267,4 @@ glance_glance_scrubber_conf_overrides: {}
 glance_glance_scheme_json_overrides: {}
 glance_glance_swift_store_conf_overrides: {}
 glance_policy_overrides: {}
+glance_api_uwsgi_ini_overrides: {}

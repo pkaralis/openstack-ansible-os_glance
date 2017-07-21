@@ -49,6 +49,10 @@
   tags:
     - glance-config
 
+- include: glance_uwsgi.yml
+  tags:
+    - glance-config
+
 - include: glance_service_setup.yml
   static: no
   when:
