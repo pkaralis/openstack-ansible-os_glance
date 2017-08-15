@@ -67,6 +67,10 @@
       dest: "/etc/glance/schema-image.json"
       config_overrides: "{{ glance_glance_scheme_json_overrides }}"
       config_type: "json"
+    - src: "rootwrap.conf.j2"
+      dest: "/etc/glance/rootwrap.conf"
+      config_overrides: "{{ glance_glance_rootwrap_conf_overrides }}"
+      config_type: "ini"
   notify:
     - Restart glance services
 

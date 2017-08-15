@@ -266,5 +266,6 @@ glance_glance_registry_conf_overrides: {}
 glance_glance_scrubber_conf_overrides: {}
 glance_glance_scheme_json_overrides: {}
 glance_glance_swift_store_conf_overrides: {}
+glance_glance_rootwrap_conf_overrides: {}
 glance_policy_overrides: {}
 glance_api_uwsgi_ini_overrides: {}
