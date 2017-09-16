@@ -72,6 +72,7 @@
       config_overrides: "{{ glance_glance_rootwrap_conf_overrides }}"
       config_type: "ini"
   notify:
+    - Manage LB
     - Restart glance services
 
 - name: Create nfs shares local path
