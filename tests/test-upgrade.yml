@@ -22,5 +22,8 @@
 # Install Keystone
 - include: common/test-install-keystone.yml
 
+# Ensure the repo is setup for previous version
+- include: common/previous/test-repo-setup.yml
+
 # Install previous version of Glance
 - include: test-install-previous-glance.yml
