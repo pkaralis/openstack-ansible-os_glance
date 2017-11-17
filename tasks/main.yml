@@ -44,8 +44,8 @@
 - include: glance_db_setup.yml
   static: no
   when:
-    - "'glance_api' in group_names"
-    - "inventory_hostname == ((groups['glance_api'] | intersect(ansible_play_hosts)) | list)[0]"
+    - "glance_services['glance-api']['group'] in group_names"
+    - "inventory_hostname == ((groups[glance_services['glance-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - glance-config
 
@@ -56,8 +56,8 @@
 - include: glance_service_setup.yml
   static: no
   when:
-    - "'glance_api' in group_names"
-    - "inventory_hostname == ((groups['glance_api'] | intersect(ansible_play_hosts)) | list)[0]"
+    - "glance_services['glance-api']['group'] in group_names"
+    - "inventory_hostname == ((groups[glance_services['glance-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - glance-config
 
@@ -68,7 +68,7 @@
     openstack_service_system_user: "{{ glance_system_user_name }}"
     openstack_service_venv_bin: "{{ glance_bin }}"
   when:
-    - "'glance_api' in group_names"
+    - "glance_services['glance-api']['group'] in group_names"
     - "'rbd' in ([glance_default_store] + glance_additional_stores)"
   tags:
     - ceph
