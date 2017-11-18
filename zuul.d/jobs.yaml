@@ -14,8 +14,15 @@
 # limitations under the License.
 
 - job:
-    name: openstack-ansible-v2_api_only
+    name: openstack-ansible-v1_api_enabled
     parent: openstack-ansible-functional
     nodeset: ubuntu-xenial
     vars:
-      tox_env: v2_api_only
+      tox_env: v1_api_enabled
+
+- job:
+    name: openstack-ansible-v2_registry_enabled
+    parent: openstack-ansible-functional
+    nodeset: ubuntu-xenial
+    vars:
+      tox_env: v2_registry_enabled
