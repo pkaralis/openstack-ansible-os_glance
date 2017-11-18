@@ -13,8 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: test-glance-resources-upgrade.yml
+# This playbook handles the installation of current Glance
+# Benchmarking, and tempest testing.
 
+# Install upgrade benchmarking
+- include: test-benchmark-glance-upgrade.yml
+
+# Install Glance
 - include: common/test-install-glance.yml
 
-- include: test-glance-resources-results.yml
+# Install and execute Tempest
+- include: common/test-install-tempest.yml
+
+# Test upgrade benchmarking results
+- include: test-benchmark-glance-upgrade-results.yml

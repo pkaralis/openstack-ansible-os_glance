@@ -37,7 +37,7 @@ export WORKING_DIR=${WORKING_DIR:-$(pwd)}
 export ROLE_NAME=${ROLE_NAME:-''}
 
 export ANSIBLE_PARAMETERS=${ANSIBLE_PARAMETERS:-"-vvv"}
-export TEST_PLAYBOOK=${TEST_PLAYBOOK:-$WORKING_DIR/tests/test-upgrade.yml}
+export TEST_PLAYBOOK=${TEST_PLAYBOOK:-$WORKING_DIR/tests/test-upgrade-pre.yml}
 export TEST_CHECK_MODE=${TEST_CHECK_MODE:-false}
 export TEST_IDEMPOTENCE=${TEST_IDEMPOTENCE:-false}
 
@@ -81,21 +81,15 @@ trap gate_job_exit_tasks EXIT
 
 # Prepare environment for the initial deploy of previous Glance
 # No upgrading or testing is done yet.
+export TEST_PLAYBOOK="${WORKING_DIR}/tests/test-upgrade-pre.yml"
 export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-glance-install.log"
 
 # Execute the setup of previous Glance
 execute_ansible_playbook
 
-# Prepare environment for the upgrade of Glance
-export TEST_PLAYBOOK="${WORKING_DIR}/tests/benchmark-upgrade.yml"
+# Prepare the environment for the upgrade of Glance
+export TEST_PLAYBOOK="${WORKING_DIR}/tests/test-upgrade-post.yml"
 export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-glance-upgrade.log"
 
-# Excute the upgrade of Glance
-execute_ansible_playbook
-
-# Prepare the environment for the testing of upgraded Glance
-export TEST_PLAYBOOK="${WORKING_DIR}/tests/test-glance-functional.yml"
-export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-glance-upgrade-test.log"
-
-# Execute testing of upgraded Glance
+# Execute the upgrade of Glance including testing/benchmarking
 execute_ansible_playbook

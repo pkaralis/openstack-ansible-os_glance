@@ -24,6 +24,9 @@ memcached_all
 [keystone_all]
 openstack1
 
+[utility_all]
+openstack1
+
 [glance_api]
 openstack1
 
