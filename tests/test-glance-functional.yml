@@ -34,6 +34,8 @@
       uri:
         url: "http://localhost:9191"
         status_code: 401
+      when:
+        - (glance_enable_v1_api | default(True)) | bool or (glance_enable_v2_registry | default(True)) | bool
 
     - name: Download the Cirros image
       get_url:
