@@ -23,6 +23,7 @@
         - openstack-ansible-functional-ubuntu-xenial
         - openstack-ansible-upgrade-ubuntu-xenial
         - openstack-ansible-v2_api_only
+        - openstack-ansible-v2_only_registry_enabled
     gate:
       jobs:
         - openstack-ansible-linters
@@ -31,3 +32,5 @@
         - openstack-ansible-functional-ubuntu-xenial
         - openstack-ansible-upgrade-ubuntu-xenial
         - openstack-ansible-v2_api_only
+        - openstack-ansible-v2_only_registry_enabled
+

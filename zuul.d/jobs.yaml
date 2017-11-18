@@ -19,3 +19,10 @@
     nodeset: ubuntu-xenial
     vars:
       tox_env: v2_api_only
+
+- job:
+    name: openstack-ansible-v2_only_registry_enabled
+    parent: openstack-ansible-functional
+    nodeset: ubuntu-xenial
+    vars:
+      tox_env: v2_only_registry_enabled
