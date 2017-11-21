@@ -1,5 +1,5 @@
 ---
-# Copyright 2015, Rackspace US, Inc.
+# Copyright 2016, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,17 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Setup the host
-- include: common/test-setup-host.yml
+tempest_run: yes
 
-# Install RabbitMQ/MariaDB
-- include: common/test-install-infra.yml
+tempest_test_whitelist:
+  - tempest.api.image
 
-# Install Keystone
-- include: common/test-install-keystone.yml
+tempest_image_api_v1_enabled: "{{ glance_enable_v1_api | default(False) }}"
+tempest_image_api_v2_enabled: "{{ glance_enable_v2_api | default(True) }}"
 
-# Install Glance
-- include: common/test-install-glance.yml
-
-# Install and execute Tempest
-- include: common/test-install-tempest.yml
