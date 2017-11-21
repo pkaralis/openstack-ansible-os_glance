@@ -1,4 +1,13 @@
 ---
+upgrade:
+  - |
+    The glance v1 API is now disabled by default as the API is scheduled
+    to be removed in Queens.
+  - |
+    The glance registry service is now disabled by default as it is not
+    required for the v2 API and is scheduled to be removed in the future.
+    The service can be enabled by setting ``glance_enable_v2_registry``
+    to ``True``.
 deprecations:
   - |
     The ``glance_enable_v1_registry`` variable has been removed. When using

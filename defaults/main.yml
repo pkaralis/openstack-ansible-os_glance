@@ -66,9 +66,12 @@ glance_show_multiple_locations: "{{ glance_default_store == 'rbd' }}"
 
 
 ## API options
-glance_enable_v1_api: True
+# The v1 API is deprecated and scheduled for removal in Queens.
+glance_enable_v1_api: False
 glance_enable_v2_api: True
-glance_enable_v2_registry: True
+# The v2 API does not require the registry service.
+# The registry service is scheduled for removal in the S cycle.
+glance_enable_v2_registry: False
 
 ## RabbitMQ info
 
