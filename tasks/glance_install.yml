@@ -81,6 +81,7 @@
     copy: "no"
   when: glance_get_venv | changed
   notify:
+    - Manage LB
     - Restart glance services
 
 - name: Install pip packages
@@ -99,6 +100,7 @@
   delay: 2
   when: glance_get_venv | failed or glance_get_venv | skipped
   notify:
+    - Manage LB
     - Restart glance services
 
 - name: Remove python from path first (CentOS, openSUSE)
