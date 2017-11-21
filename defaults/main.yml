@@ -67,7 +67,6 @@ glance_show_multiple_locations: "{{ glance_default_store == 'rbd' }}"
 
 ## API options
 glance_enable_v1_api: True
-glance_enable_v1_registry: True
 glance_enable_v2_api: True
 glance_enable_v2_registry: True
 
@@ -235,12 +234,13 @@ glance_services:
     wsgi_app: True
     log_string: "--logto "
     wsgi_name: glance-wsgi-api
-    uwsgi_bind_address: "{{glance_api_bind_address }}"
+    uwsgi_bind_address: "{{ glance_api_bind_address }}"
     uwsgi_port: "{{ glance_api_service_port }}"
     program_override: "{{ glance_bin }}/uwsgi --ini /etc/uwsgi/glance-api.ini"
   glance-registry:
     group: glance_registry
     service_name: glance-registry
+    condition: "{{ glance_enable_v1_api | bool or glance_enable_v2_registry | bool }}"
     init_config_overrides: "{{ glance_registry_init_overrides }}"
     start_order: 2
 
