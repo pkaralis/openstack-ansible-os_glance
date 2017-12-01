@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Drop Glance Config(s)
+- name: Deploy Glance configuration files
   config_template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -22,7 +22,7 @@
     mode: "0640"
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
-  when: "{{ item.condition | default(True) }}"
+  when: item.condition | default(True)
   with_items:
     - src: "glance-api-paste.ini.j2"
       dest: "/etc/glance/glance-api-paste.ini"
