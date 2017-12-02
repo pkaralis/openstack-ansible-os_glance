@@ -16,8 +16,9 @@
 glance_distro_packages:
   - cronie
   - cronie-anacron
+  - git
+  - libxml2-devel
+  - nfs-utils
   - rpcbind
   - rsync
-  - git
-  - nfs-utils
   - which
