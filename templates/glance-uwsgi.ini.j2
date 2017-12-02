@@ -17,3 +17,6 @@ add-header = Connection: close
 buffer-size = {{ glance_wsgi_buffer_size }}
 thunder-lock = true
 logfile-chmod = 644
+http-auto-chunked = true
+http-raw-body = true
+socket-timeout = 10

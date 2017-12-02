@@ -234,12 +234,16 @@ glance_services:
     init_config_overrides: "{{ glance_api_init_overrides }}"
     start_order: 1
     wsgi_overrides: "{{ glance_api_uwsgi_ini_overrides }}"
-    wsgi_app: True
-    log_string: "--logto "
+    wsgi_app: "{{ not glance_enable_v1_api }}"
+    log_string: "{{ glance_enable_v1_api | ternary('--log-file=', '--logto ') }}"
     wsgi_name: glance-wsgi-api
     uwsgi_bind_address: "{{ glance_api_bind_address }}"
     uwsgi_port: "{{ glance_api_service_port }}"
-    program_override: "{{ glance_bin }}/uwsgi --ini /etc/uwsgi/glance-api.ini"
+    program_override: >-
+       {{ glance_enable_v1_api | ternary(
+          glance_bin ~ '/glance-api',
+          glance_bin ~ '/uwsgi --ini /etc/uwsgi/glance-api.ini')
+       }}
   glance-registry:
     group: glance_registry
     service_name: glance-registry
