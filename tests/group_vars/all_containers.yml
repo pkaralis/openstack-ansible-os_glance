@@ -24,3 +24,8 @@ container_networks:
 physical_host: localhost
 properties:
   service_name: "{{ inventory_hostname }}"
+
+# NOTE(cloudnull): The lxc-openstack AA profile for is used to ensure general
+#                  container functionality typical to the integrated build.
+lxc_container_config_list:
+  - "lxc.aa_profile=lxc-openstack"

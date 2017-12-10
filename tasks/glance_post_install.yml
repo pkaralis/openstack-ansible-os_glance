@@ -79,13 +79,27 @@
     state: directory
   with_items: "{{ glance_nfs_client }}"
 
+- name: Glance nfs mount(s)
+  config_template:
+    src: "glance-systemd-mount.j2"
+    dest: "/etc/systemd/system/{{ item.local_path.lstrip('/') | replace('/', '-') }}.mount"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+    config_overrides: "{{ item.config_overrides | default({}) }}"
+    config_type: "ini"
+  when: item.condition | default(True)
+  with_items: "{{ glance_nfs_client }}"
+  notify:
+    - Start glance mount(s)
+
+# NOTE(cloudnull): This remove the legacy mount in /etc/fstab. This task should
+#                  be removed in the R release.
 - name: Glance mount nfs
-  mount:
-    name: "{{ item.local_path }}"
-    src: "{{ item.server }}:{{ item.remote_path }}"
-    fstype: "{{ item.type }}"
-    opts: "{{ item.options }}"
-    state: "mounted"
+  lineinfile:
+    path: /etc/fstab
+    state: absent
+    regexp: '^{{ item.server }}:{{ item.remote_path }}.*'
   with_items: "{{ glance_nfs_client }}"
 
 - name: Create glance cache management cron jobs

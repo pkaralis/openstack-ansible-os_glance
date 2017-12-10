@@ -1,5 +1,5 @@
 ---
-# Copyright 2017, Rackspace US, Inc.
+# Copyright 2015, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,23 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- job:
-    name: openstack-ansible-v2_api_only
-    parent: openstack-ansible-functional
-    nodeset: ubuntu-xenial
-    vars:
-      tox_env: v2_api_only
-
-- job:
-    name: openstack-ansible-v2_only_registry_enabled
-    parent: openstack-ansible-functional
-    nodeset: ubuntu-xenial
-    vars:
-      tox_env: v2_only_registry_enabled
-
-- job:
-    name: openstack-ansible-nfs_glance
-    parent: openstack-ansible-functional
-    nodeset: ubuntu-xenial
-    vars:
-      tox_env: nfs
+# Force glance to use file by default which will be an NFS mount point.
+glance_default_store: file
+glance_nfs_client:
+  - server: "10.1.0.1"
+    remote_path: "/srv/nfs/glance"
+    local_path: "/var/lib/glance/images"
+    type: "nfs"
+    options: "_netdev,auto"
