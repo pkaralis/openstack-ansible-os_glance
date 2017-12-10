@@ -13,6 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- include: test-create-nfs-dev.yml
+  when:
+    - test_deploy_nfs | default(false) | bool
+
 # Setup the host
 - include: common/test-setup-host.yml
 

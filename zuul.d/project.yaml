@@ -21,6 +21,7 @@
         - openstack-ansible-functional-centos-7
         - openstack-ansible-functional-opensuse-423
         - openstack-ansible-functional-ubuntu-xenial
+        - openstack-ansible-nfs_glance
         - openstack-ansible-upgrade-ubuntu-xenial
         - openstack-ansible-v1_api_enabled
         - openstack-ansible-v2_registry_enabled
@@ -33,7 +34,7 @@
         - openstack-ansible-functional-centos-7
         - openstack-ansible-functional-opensuse-423
         - openstack-ansible-functional-ubuntu-xenial
+        - openstack-ansible-nfs_glance
         - openstack-ansible-upgrade-ubuntu-xenial
         - openstack-ansible-v1_api_enabled
         - openstack-ansible-v2_registry_enabled
-

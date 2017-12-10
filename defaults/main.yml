@@ -55,6 +55,18 @@ glance_system_shell: /bin/false
 glance_system_comment: glance system user
 glance_system_user_home: "/var/lib/{{ glance_system_user_name }}"
 
+## Manually specified nova UID/GID
+# Deployers can specify a UID for the glance user as well as the GID for the
+# glance group if needed. This is commonly used in environments where shared
+# storage is used, such as NFS or GlusterFS, and glance UID/GID values must be
+# in sync between multiple servers.
+#
+# WARNING: Changing these values on an existing deployment can lead to
+#          failures, errors, and instability.
+#
+# glance_system_user_uid: <UID>
+# glance_system_group_gid: <GID>
+
 glance_registry_host: "{{ internal_lb_vip_address }}"
 glance_default_store: file
 glance_additional_stores:
@@ -184,6 +196,7 @@ glance_nfs_client: []
 #     local_path: "/var/lib/glance/images"  ## Local path on machine
 #     type: "nfs"                           ## This can be nfs or nfs4
 #     options: "_netdev,auto"               ## Mount options
+#     config_overrides: "{}"                ## Override dictionary for unit file
 
 ## Policy vars
 # Provide a list of access controls to update the default policy.json with. These changes will be merged

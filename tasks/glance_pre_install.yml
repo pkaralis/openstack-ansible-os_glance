@@ -16,18 +16,27 @@
 - name: create the system group
   group:
     name: "{{ glance_system_group_name }}"
+    gid: "{{ glance_system_group_gid | default(omit) }}"
     state: "present"
     system: "yes"
 
 - name: Create the glance system user
   user:
     name: "{{ glance_system_user_name }}"
+    uid: "{{ glance_system_user_uid | default(omit) }}"
     group: "{{ glance_system_group_name }}"
     comment: "{{ glance_system_comment }}"
     shell: "{{ glance_system_shell }}"
     system: "yes"
     createhome: "yes"
     home: "{{ glance_system_user_home }}"
+
+- name: Create glance NFS mount point(s)
+  file:
+    path: "{{ item.local_path }}"
+    state: directory
+    mode: "0755"
+  with_items: "{{ glance_nfs_client }}"
 
 - name: Create glance dir
   file:
@@ -43,8 +52,23 @@
     - { path: "{{ glance_system_user_home }}" }
     - { path: "{{ glance_system_user_home }}/cache/api", mode: "0700" }
     - { path: "{{ glance_system_user_home }}/cache/registry" }
-    - { path: "{{ glance_system_user_home }}/images/" }
     - { path: "{{ glance_system_user_home }}/scrubber" }
+
+- name: Stat the images directory
+  stat:
+    path: "{{ glance_system_user_home }}/images/"
+  changed_when: false
+  register: images_stat
+
+- name: Create glance images dir
+  file:
+    path: "{{ glance_system_user_home }}/images/"
+    state: directory
+    owner: "{{ glance_system_user_name }}"
+    group: "{{ glance_system_group_name }}"
+    mode: "0755"
+  when:
+    - not images_stat.stat.exists | default(false) | bool
 
 - name: Test for log directory or link
   shell: |

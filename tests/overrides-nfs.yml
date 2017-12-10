@@ -1,5 +1,5 @@
 ---
-# Copyright 2016, Rackspace US, Inc.
+# Copyright 2015, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,19 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-container_name: "{{ inventory_hostname }}"
-container_networks:
-  management_address:
-    address: "{{ ansible_host }}"
-    bridge: "br-mgmt"
-    interface: "eth1"
-    netmask: "255.255.252.0"
-    type: "veth"
-physical_host: localhost
-properties:
-  service_name: "{{ inventory_hostname }}"
-
-# NOTE(cloudnull): The lxc-openstack AA profile for is used to ensure general
-#                  container functionality typical to the integrated build.
-lxc_container_config_list:
-  - "lxc.aa_profile=lxc-openstack"
+# Force glance to use file by default which will be an NFS mount point.
+glance_default_store: file
+glance_nfs_client:
+  - server: "10.1.0.1"
+    remote_path: "/srv/nfs/glance"
+    local_path: "/var/lib/glance/images"
+    type: "nfs"
+    options: "_netdev,auto"

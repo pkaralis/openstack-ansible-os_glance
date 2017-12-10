@@ -26,3 +26,10 @@
     nodeset: ubuntu-xenial
     vars:
       tox_env: v2_registry_enabled
+
+- job:
+    name: openstack-ansible-nfs_glance
+    parent: openstack-ansible-functional
+    nodeset: ubuntu-xenial
+    vars:
+      tox_env: nfs
