@@ -23,7 +23,7 @@ transport_url = rabbit://{% for host in glance_rabbitmq_servers.split(',') %}{{ 
 
 
 [database]
-connection = mysql+pymysql://{{ glance_galera_user }}:{{ glance_container_mysql_password }}@{{ glance_galera_address }}/{{ glance_galera_database }}?charset=utf8
+connection = mysql+pymysql://{{ glance_galera_user }}:{{ glance_container_mysql_password }}@{{ glance_galera_address }}/{{ glance_galera_database }}?charset=utf8{% if glance_galera_use_ssl | bool %}&ssl_ca={{ glance_galera_ssl_ca_cert }}{% endif %}
 
 [keystone_authtoken]
 insecure = {{ keystone_service_internaluri_insecure | bool }}
