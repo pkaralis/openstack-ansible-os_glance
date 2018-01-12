@@ -54,12 +54,6 @@
     - { path: "{{ glance_system_user_home }}/cache/registry" }
     - { path: "{{ glance_system_user_home }}/scrubber" }
 
-- name: Stat the images directory
-  stat:
-    path: "{{ glance_system_user_home }}/images/"
-  changed_when: false
-  register: images_stat
-
 - name: Create glance images dir
   file:
     path: "{{ glance_system_user_home }}/images/"
@@ -67,8 +61,6 @@
     owner: "{{ glance_system_user_name }}"
     group: "{{ glance_system_group_name }}"
     mode: "0755"
-  when:
-    - not images_stat.stat.exists | default(false) | bool
 
 - name: Test for log directory or link
   shell: |
