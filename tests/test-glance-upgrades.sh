@@ -37,7 +37,7 @@ export WORKING_DIR=${WORKING_DIR:-$(pwd)}
 export ROLE_NAME=${ROLE_NAME:-''}
 
 export ANSIBLE_PARAMETERS=${ANSIBLE_PARAMETERS:-"-vvv"}
-export TEST_PLAYBOOK=${TEST_PLAYBOOK:-$WORKING_DIR/tests/test-upgrade-pre.yml}
+export TEST_PLAYBOOK=${TEST_PLAYBOOK:-$WORKING_DIR/tests/test-upgrade.yml}
 export TEST_CHECK_MODE=${TEST_CHECK_MODE:-false}
 export TEST_IDEMPOTENCE=${TEST_IDEMPOTENCE:-false}
 
@@ -56,7 +56,8 @@ echo "TEST_IDEMPOTENCE: ${TEST_IDEMPOTENCE}"
 function execute_ansible_playbook {
 
   export ANSIBLE_CLI_PARAMETERS="${ANSIBLE_PARAMETERS}"
-  CMD_TO_EXECUTE="ansible-playbook ${TEST_PLAYBOOK} $@ ${ANSIBLE_CLI_PARAMETERS}"
+  export ANSIBLE_BIN=${ANSIBLE_BIN:-"ansible-playbook"}
+  CMD_TO_EXECUTE="${ANSIBLE_BIN}  ${TEST_PLAYBOOK} $@ ${ANSIBLE_CLI_PARAMETERS}"
 
   echo "Executing: ${CMD_TO_EXECUTE}"
   echo "With:"
@@ -72,13 +73,28 @@ function execute_ansible_playbook {
 # Ensure that the Ansible environment is properly prepared
 source "${COMMON_TESTS_PATH}/test-ansible-env-prep.sh"
 
-# Prepare environment for the initial deploy of previous Glance
+# Prepare environment for the initial deploy of (previous and current) Glance
 # No upgrading or testing is done yet.
-export TEST_PLAYBOOK="${WORKING_DIR}/tests/test-upgrade-pre.yml"
+export TEST_PLAYBOOK="${WORKING_DIR}/tests/test-upgrade.yml"
 export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-glance-install.log"
 
-# Execute the setup of previous Glance
+# Execute the setup of current infrastructure
 execute_ansible_playbook
+
+# Prepare environment for the deploy of previous glance:
+# No upgrading or testing is done yet.
+export TEST_PLAYBOOK="${WORKING_DIR}/tests/test-install-previous-glance.yml"
+export ANSIBLE_LOG_PATH="${ANSIBLE_LOG_DIR}/ansible-execute-previous_glance-install.log"
+export PREVIOUS_VENV="ansible-previous"
+export ANSIBLE_BIN="${WORKING_DIR}/.tox/${PREVIOUS_VENV}/bin/ansible-playbook"
+source ${COMMON_TESTS_PATH}/test-create-previous-venv.sh
+
+# Execute the setup of previous glance
+execute_ansible_playbook
+
+# Unset previous branch overrides
+unset PREVIOUS_VENV
+unset ANSIBLE_BIN
 
 # Prepare the environment for the upgrade of Glance
 export TEST_PLAYBOOK="${WORKING_DIR}/tests/test-upgrade-post.yml"
