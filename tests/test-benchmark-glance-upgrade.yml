@@ -26,7 +26,9 @@
       - "python-keystoneclient"
       - "python-glanceclient"
       - "openstacksdk"
-  tasks:
+  roles:
+    - openstack_openrc
+  post_tasks:
     - name: Install openstack clients
       pip:
         name: "{{ upgrade_test_packages }}"
@@ -49,9 +51,6 @@
         executable: /bin/bash
       async: 100000
       poll: 0
-      environment:
-        OS_AUTH_URL: "{{ keystone_service_publicurl }}"
-        OS_PASSWORD: "{{ keystone_auth_admin_password }}"
       register: rolling_test_benchmark
   vars_files:
     - common/test-vars.yml
