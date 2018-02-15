@@ -27,6 +27,9 @@
       - "python-glanceclient"
       - "openstacksdk"
   tasks:
+    - name: Lay clouds.yaml file
+      include_role:
+        name: openstack_openrc
     - name: Install openstack clients
       pip:
         name: "{{ upgrade_test_packages }}"
