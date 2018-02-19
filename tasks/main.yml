@@ -25,36 +25,34 @@
   tags:
     - always
 
-- include: glance_pre_install.yml
+- include_tasks: glance_pre_install.yml
   tags:
     - glance-install
 
-- include: glance_install.yml
+- include_tasks: glance_install.yml
   tags:
     - glance-install
 
-- include: glance_post_install.yml
+- include_tasks: glance_post_install.yml
   tags:
     - glance-config
 
-- include: "glance_init_{{ ansible_service_mgr }}.yml"
+- include_tasks: "glance_init_{{ ansible_service_mgr }}.yml"
   tags:
     - glance-config
 
-- include: glance_db_setup.yml
-  static: no
+- include_tasks: glance_db_setup.yml
   when:
     - "glance_services['glance-api']['group'] in group_names"
     - "inventory_hostname == ((groups[glance_services['glance-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
   tags:
     - glance-config
 
-- include: glance_uwsgi.yml
+- include_tasks: glance_uwsgi.yml
   tags:
     - glance-config
 
-- include: glance_service_setup.yml
-  static: no
+- include_tasks: glance_service_setup.yml
   when:
     - "glance_services['glance-api']['group'] in group_names"
     - "inventory_hostname == ((groups[glance_services['glance-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
