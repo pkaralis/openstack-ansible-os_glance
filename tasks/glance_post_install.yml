@@ -98,15 +98,6 @@
   notify:
     - Start glance mount(s)
 
-# NOTE(cloudnull): This remove the legacy mount in /etc/fstab. This task should
-#                  be removed in the R release.
-- name: Glance mount nfs
-  lineinfile:
-    path: /etc/fstab
-    state: absent
-    regexp: '^{{ item.server }}:{{ item.remote_path }}.*'
-  with_items: "{{ glance_nfs_client }}"
-
 - name: Create glance cache management cron jobs
   cron:
     name: "{{ item.name }}"
