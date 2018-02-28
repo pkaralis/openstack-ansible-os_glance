@@ -14,11 +14,7 @@
 # limitations under the License.
 
 glance_distro_packages:
-  - cronie
-  - cronie-anacron
   - git
   - libxml2-devel
   - nfs-utils
   - rpcbind
-  - rsync
-  - which

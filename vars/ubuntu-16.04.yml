@@ -22,4 +22,3 @@ glance_distro_packages:
   - libxml2-dev
   - nfs-common
   - rpcbind
-  - rsync
