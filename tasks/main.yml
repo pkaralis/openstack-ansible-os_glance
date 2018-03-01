@@ -33,10 +33,6 @@
   tags:
     - glance-config
 
-- include_tasks: "glance_init_{{ ansible_service_mgr }}.yml"
-  tags:
-    - glance-config
-
 - include_tasks: glance_db_setup.yml
   when:
     - "glance_services['glance-api']['group'] in group_names"
