@@ -78,19 +78,33 @@
     - Manage LB
     - Restart glance services
 
-- name: Glance nfs mount(s)
-  config_template:
-    src: "glance-systemd-mount.j2"
-    dest: "/etc/systemd/system/{{ item.local_path.lstrip('/') | replace('/', '-') }}.mount"
-    owner: "root"
-    group: "root"
-    mode: "0640"
-    config_overrides: "{{ item.config_overrides | default({}) }}"
-    config_type: "ini"
-  when: item.condition | default(True)
+- name: Run the systemd mount role
+  include_role:
+    name: systemd_mount
+    private: true
+  vars:
+    systemd_mounts:
+      - config_overrides: "{{ mount_var.config_overrides | default({}) }}"
+        what: "{{ mount_var.server }}:{{ mount_var.remote_path }}"
+        where: "{{ mount_var.local_path }}"
+        type: "{{ mount_var.type }}"
+        options: "{{ mount_var.options }}"
+        unit:
+          After:
+            - network.target rpcbind.service rpc-statd.service
+          Conflicts:
+            - umount.target
+          Requires:
+            - rpcbind.service rpc-statd.service
+          Before:
+            - glance-api.service
+        state: 'started'
+        enabled: true
   with_items: "{{ glance_nfs_client }}"
-  notify:
-    - Start glance mount(s)
+  loop_control:
+    loop_var: mount_var
+  tags:
+    - glance-config
 
 - name: Create glance cache management cron jobs
   cron:
