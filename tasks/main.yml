@@ -25,10 +25,6 @@
   tags:
     - always
 
-- include_tasks: glance_pre_install.yml
-  tags:
-    - glance-install
-
 - include_tasks: glance_install.yml
   tags:
     - glance-install
