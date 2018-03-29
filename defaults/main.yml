@@ -249,14 +249,18 @@ glance_services:
     start_order: 1
     wsgi_overrides: "{{ glance_api_uwsgi_ini_overrides }}"
     wsgi_app: "{{ not glance_enable_v1_api }}"
-    log_string: "{{ glance_enable_v1_api | ternary('--log-file=', '--logto ') }}"
     wsgi_name: glance-wsgi-api
     uwsgi_bind_address: "{{ glance_api_bind_address }}"
     uwsgi_port: "{{ glance_api_service_port }}"
-    program_override: >-
+    execstarts: >-
        {{ glance_enable_v1_api | ternary(
           glance_bin ~ '/glance-api',
           glance_bin ~ '/uwsgi --ini /etc/uwsgi/glance-api.ini')
+       }}
+    execreloads: >-
+       {{ glance_enable_v1_api | ternary(
+          '/bin/kill -HUP $MAINPID',
+          glance_bin ~ '/uwsgi --reload /var/run/glance-api/glance-api.pid')
        }}
   glance-registry:
     group: glance_registry
@@ -264,6 +268,7 @@ glance_services:
     condition: "{{ glance_enable_v1_api | bool or glance_enable_v2_registry | bool }}"
     init_config_overrides: "{{ glance_registry_init_overrides }}"
     start_order: 2
+    execstarts: "{{ glance_bin }}/glance-registry"
 
 # Glance uWSGI settings
 glance_wsgi_processes_max: 16

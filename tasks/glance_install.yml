@@ -128,49 +128,30 @@
         option: "venv_tag"
         value: "{{ glance_venv_tag }}"
 
-- name: Create TEMP run dir
-  file:
-    path: "/var/run/{{ item.service_name }}"
-    state: directory
-    owner: "{{ glance_system_user_name }}"
-    group: "{{ glance_system_group_name }}"
-    mode: "02755"
+- name: Run the systemd service role
+  include_role:
+    name: systemd_service
+    private: true
+  vars:
+    systemd_user_name: "{{ glance_system_user_name }}"
+    systemd_group_name: "{{ glance_system_group_name }}"
+    systemd_tempd_prefix: openstack
+    systemd_slice_name: glance
+    system_lock_path: /var/lock/glance
+    systemd_CPUAccounting: true
+    systemd_BlockIOAccounting: true
+    systemd_MemoryAccounting: true
+    systemd_TasksAccounting: true
+    systemd_services:
+      - service_name: "{{ service_var.service_name }}"
+        enabled: yes
+        state: started
+        execstarts: "{{ service_var.execstarts }}"
+        execreloads: "{{ service_var.execreloads | default([]) }}"
+        config_overrides: "{{ service_var.init_config_overrides }}"
   with_items: "{{ filtered_glance_services }}"
-
-- name: Create TEMP lock dir
-  file:
-    path: "/var/lock/{{ item.service_name }}"
-    state: directory
-    owner: "{{ glance_system_user_name }}"
-    group: "{{ glance_system_group_name }}"
-    mode: "02755"
-  with_items: "{{ filtered_glance_services }}"
-
-- name: Create tmpfiles.d entry
-  template:
-    src: "glance-systemd-tmpfiles.j2"
-    dest: "/etc/tmpfiles.d/openstack-{{ item.service_name }}.conf"
-    mode: "0644"
-    owner: "root"
-    group: "root"
-  with_items: "{{ filtered_glance_services }}"
-  notify:
-    - Manage LB
-    - Restart glance services
-
-- name: Place the systemd init script
-  config_template:
-    src: "glance-systemd-init.j2"
-    dest: "/etc/systemd/system/{{ item.service_name }}.service"
-    mode: "0644"
-    owner: "root"
-    group: "root"
-    config_overrides: "{{ item.init_config_overrides }}"
-    config_type: "ini"
-  with_items: "{{ filtered_glance_services }}"
-  notify:
-    - Manage LB
-    - Restart glance services
+  loop_control:
+    loop_var: service_var
 
 - name: Ensure uWSGI directory exists
   file:
