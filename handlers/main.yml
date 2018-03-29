@@ -32,9 +32,7 @@
   until: _stop | success
   retries: 5
   delay: 2
-  listen:
-    - "Restart glance services"
-    - "venv changed"
+  listen: "Restart glance services"
 
 # TODO(odyssey4me):
 # Assuming glance-registry is removed in the S cycle as planned, this
@@ -84,9 +82,7 @@
     - "/etc/systemd/system/{{ glance_services['glance-registry']['service_name'] }}.service"
   when:
     - not glance_services['glance-registry']['condition']
-  listen:
-    - "Restart glance services"
-    - "venv changed"
+  listen: "Restart glance services"
 
 # Note (odyssey4me):
 # The policy.json file is currently read continually by the services
@@ -104,9 +100,7 @@
     group: "{{ glance_system_group_name }}"
     mode: "0640"
     remote_src: yes
-  listen:
-    - "Restart glance services"
-    - "venv changed"
+  listen: "Restart glance services"
 
 - name: Start services
   service:
@@ -119,9 +113,7 @@
   until: _start | success
   retries: 5
   delay: 2
-  listen:
-    - "Restart glance services"
-    - "venv changed"
+  listen: "Restart glance services"
 
 - meta: noop
   listen: Manage LB
