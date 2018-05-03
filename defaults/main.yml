@@ -16,6 +16,9 @@
 ## Verbosity Options
 debug: False
 
+# Set installation method
+glance_install_method: "source"
+
 # Set the package install state for distribution and pip packages
 # Options are 'present' and 'latest'
 glance_package_state: "latest"
@@ -29,13 +32,13 @@ glance_developer_constraints:
 
 # Name of the virtual env to deploy into
 glance_venv_tag: untagged
-glance_bin: "/openstack/venvs/glance-{{ glance_venv_tag }}/bin"
+glance_bin: "{{ _glance_bin }}"
 
 # Set the etc dir path where glance is installed.
 #  This is used for role access to the db migrations.
 #  Example:
 #  glance_etc_dir: "/usr/local/etc/glance"
-glance_etc_dir: "{{ glance_bin | dirname }}/etc/glance"
+glance_etc_dir: "{{ _glance_etc }}/glance"
 
 # venv_download, even when true, will use the fallback method of building the
 # venv from scratch if the venv download fails.
@@ -255,12 +258,12 @@ glance_services:
     execstarts: >-
        {{ glance_enable_v1_api | ternary(
           glance_bin ~ '/glance-api',
-          glance_bin ~ '/uwsgi --autoload --ini /etc/uwsgi/glance-api.ini')
+          _glance_wsgi_bin ~ '/uwsgi --autoload --ini /etc/uwsgi/glance-api.ini')
        }}
     execreloads: >-
        {{ glance_enable_v1_api | ternary(
           '/bin/kill -HUP $MAINPID',
-          glance_bin ~ '/uwsgi --reload /var/run/glance-api/glance-api.pid')
+          _glance_wsgi_bin ~ '/uwsgi --reload /var/run/glance-api/glance-api.pid')
        }}
   glance-registry:
     group: glance_registry
@@ -268,7 +271,7 @@ glance_services:
     condition: "{{ glance_enable_v1_api | bool or glance_enable_v2_registry | bool }}"
     init_config_overrides: "{{ glance_registry_init_overrides }}"
     start_order: 2
-    execstarts: "{{ glance_bin }}/glance-registry"
+    execstarts: "{{ _glance_bin }}/glance-registry"
 
 # Glance uWSGI settings
 glance_wsgi_processes_max: 16
