@@ -85,7 +85,7 @@
 
 - name: Install distro packages
   package:
-    name: "{{ glance_distro_packages }}"
+    name: "{{ glance_package_list }}"
     state: "{{ glance_package_state }}"
     update_cache: "{{ (ansible_pkg_mgr in ['apt', 'zypper']) | ternary('yes', omit) }}"
     cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
@@ -94,133 +94,29 @@
   retries: 5
   delay: 2
 
-- name: Create developer mode constraint file
-  copy:
-    dest: "/opt/developer-pip-constraints.txt"
-    content: |
-      {% for item in glance_developer_constraints %}
-      {{ item }}
-      {% endfor %}
-  when: glance_developer_mode | bool
-
-- name: Install requires pip packages
-  pip:
-    name: "{{ glance_requires_pip_packages }}"
-    state: "{{ glance_pip_package_state }}"
-    extra_args: >-
-      {{ glance_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
-      {{ pip_install_options | default('') }}
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-
-- name: Retrieve checksum for venv download
-  uri:
-    url: "{{ glance_venv_download_url | replace('tgz', 'checksum') }}"
-    return_content: yes
-  register: glance_venv_checksum
-  when: glance_venv_download | bool
-
-- name: Attempt venv download
-  get_url:
-    url: "{{ glance_venv_download_url }}"
-    dest: "/var/cache/{{ glance_venv_download_url | basename }}"
-    checksum: "sha1:{{ glance_venv_checksum.content | trim }}"
-  register: glance_get_venv
-  when: glance_venv_download | bool
-
-- name: Remove existing venv
-  file:
-    path: "{{ glance_bin | dirname }}"
-    state: absent
-  when: glance_get_venv | changed
-
-- name: Create glance venv dir
-  file:
-    path: "{{ glance_bin | dirname }}"
-    state: directory
-  register: glance_venv_dir
-  when: glance_get_venv | changed
-
-- name: Unarchive pre-built venv
-  unarchive:
-    src: "/var/cache/{{ glance_venv_download_url | basename }}"
-    dest: "{{ glance_bin | dirname }}"
-    copy: "no"
-  when: glance_get_venv | changed
-  notify:
-    - Manage LB
-    - Restart glance services
-
-- name: Install pip packages
-  pip:
-    name: "{{ glance_pip_packages }}"
-    state: "{{ glance_pip_package_state }}"
-    virtualenv: "{{ glance_bin | dirname }}"
-    virtualenv_site_packages: "no"
-    extra_args: >-
-      {{ glance_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-      {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
-      {{ pip_install_options | default('') }}
-  register: install_packages
-  until: install_packages|success
-  retries: 5
-  delay: 2
-  when: glance_get_venv | failed or glance_get_venv | skipped
-  notify:
-    - Manage LB
-    - Restart glance services
-
-- name: Remove python from path first (CentOS, openSUSE)
-  file:
-    path:  "{{ glance_bin | dirname }}/bin/python2.7"
-    state: "absent"
-  when:
-    - ansible_pkg_mgr in ['yum', 'dnf', 'zypper']
-    - glance_get_venv | changed
-
-# NOTE(odyssey4me):
-# We reinitialize the venv to ensure that the right
-# version of python is in the venv, but we do not
-# want virtualenv to also replace pip, setuptools
-# and wheel so we tell it not to.
-# We do not use --always-copy for CentOS/SuSE due
-# to https://github.com/pypa/virtualenv/issues/565
-- name: Update virtualenv path
-  shell: |
-    find {{ glance_bin }} -name \*.pyc -delete
-    sed -si '1s/^.*python.*$/#!{{ glance_bin | replace ('/','\/') }}\/python/' {{ glance_bin }}/*
-    virtualenv {{ glance_bin | dirname }} \
-        {{ (ansible_pkg_mgr == 'apt') | ternary('--always-copy', '') }} \
-        --no-pip \
-        --no-setuptools \
-        --no-wheel
-  when: glance_get_venv | changed
-  tags:
-    - skip_ansible_lint
+- name: Install glance packages from PIP
+  include_tasks: glance_install_source.yml
+  when: glance_install_method == 'source'
 
 - name: Record the need for a service restart
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: glance
-    option: need_service_restart
-    value: True
-  when: (glance_get_venv | changed) or
-        (glance_venv_dir | changed) or
+    option: "{{ item.name }}"
+    value: "{{ item.state }}"
+  with_items:
+    - name: "need_service_restart"
+      state: "True"
+    - name: "install_method"
+      state: "{{ glance_install_method }}"
+  when: (glance_install_method == 'source' and
+         ((glance_get_venv | changed) or
+          (glance_venv_dir | changed))) or
         (install_packages | changed) or
         (ansible_local is not defined) or
         ('openstack_ansible' not in ansible_local) or
         ('glance' not in ansible_local['openstack_ansible']) or
         ('need_service_restart' not in ansible_local['openstack_ansible']['glance'])
-
-- name: Record the venv tag deployed
-  ini_file:
-    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
-    section: glance
-    option: venv_tag
-    value: "{{ glance_venv_tag }}"
 
 - name: Run the systemd service role
   include_role:

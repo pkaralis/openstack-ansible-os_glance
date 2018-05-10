@@ -22,3 +22,11 @@ glance_distro_packages:
   - libxml2-dev
   - nfs-common
   - rpcbind
+
+glance_service_distro_packages:
+  - glance
+  - glance-api
+  - uwsgi
+  - uwsgi-plugin-python
+
+glance_wsgi_bin: '/usr/bin'

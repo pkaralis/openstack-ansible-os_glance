@@ -19,3 +19,11 @@ glance_distro_packages:
   - libxml2-devel
   - nfs-utils
   - rpcbind
+
+glance_service_distro_packages:
+  - openstack-glance
+  - openstack-glance-api
+  - uwsgi
+  - uwsgi-python
+
+glance_wsgi_bin: '/usr/sbin'

@@ -2,7 +2,9 @@
 uid = {{ glance_system_user_name }}
 gid = {{ glance_system_group_name }}
 
+{% if glance_install_method == 'source' %}
 virtualenv = /openstack/venvs/glance-{{ glance_venv_tag }}
+{% endif %}
 wsgi-file = {{ glance_bin }}/{{ item.wsgi_name }}
 http-socket = {{ item.uwsgi_bind_address }}:{{ item.uwsgi_port }}
 
