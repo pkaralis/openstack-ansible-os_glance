@@ -258,12 +258,12 @@ glance_services:
     execstarts: >-
        {{ glance_enable_v1_api | ternary(
           glance_bin ~ '/glance-api',
-          _glance_wsgi_bin ~ '/uwsgi --autoload --ini /etc/uwsgi/glance-api.ini')
+          glance_uwsgi_bin ~ '/uwsgi --autoload --ini /etc/uwsgi/glance-api.ini')
        }}
     execreloads: >-
        {{ glance_enable_v1_api | ternary(
           '/bin/kill -HUP $MAINPID',
-          _glance_wsgi_bin ~ '/uwsgi --reload /var/run/glance-api/glance-api.pid')
+          glance_uwsgi_bin ~ '/uwsgi --reload /var/run/glance-api/glance-api.pid')
        }}
   glance-registry:
     group: glance_registry

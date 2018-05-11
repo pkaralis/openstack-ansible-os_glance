@@ -26,4 +26,4 @@ glance_service_distro_packages:
   - uwsgi
   - uwsgi-python
 
-glance_wsgi_bin: '/usr/sbin'
+glance_uwsgi_bin: '/usr/sbin'

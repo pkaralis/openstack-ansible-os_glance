@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-glance_package_list: "{{ glance_distro_packages + glance_service_distro_packages }}"
+glance_package_list: "{{ glance_service_distro_packages }}"
 
 _glance_bin: "/usr/bin"
 _glance_etc: "/etc"
-_glance_wsgi_bin: "{{ glance_wsgi_bin }}"

@@ -116,7 +116,8 @@
         (ansible_local is not defined) or
         ('openstack_ansible' not in ansible_local) or
         ('glance' not in ansible_local['openstack_ansible']) or
-        ('need_service_restart' not in ansible_local['openstack_ansible']['glance'])
+        ('need_service_restart' not in ansible_local['openstack_ansible']['glance']) or
+        ('install_method' not in ansible_local['openstack_ansible']['glance'])
 
 - name: Run the systemd service role
   include_role:

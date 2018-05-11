@@ -25,7 +25,9 @@
         - openstack-ansible-v2_registry_enabled
         - openstack-ansible-glance-ssl-nv
         - openstack-ansible-functional-distro_install-ubuntu-xenial
-        - openstack-ansible-functional-distro_install-centos-7
+          # NOTE(hwoarang) Centos7 is having some troubles with repo dependencies
+          # so disabling until it's investigated.
+        - openstack-ansible-functional-distro_install-centos-7-nv
         - openstack-ansible-functional-distro_install-opensuse-423
     experimental:
       jobs:
