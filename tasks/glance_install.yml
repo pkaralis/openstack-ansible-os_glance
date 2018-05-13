@@ -50,55 +50,32 @@
     mode: "0755"
   with_items: "{{ glance_nfs_client }}"
 
-- name: Create glance dir
+- name: Create glance directories
   file:
-    path: "{{ item.path }}"
+    path: "{{ item.path | realpath }}"
     state: directory
-    owner: "{{ item.owner|default(glance_system_user_name) }}"
-    group: "{{ item.group|default(glance_system_group_name) }}"
-    mode: "{{ item.mode|default(omit) }}"
+    owner: "{{ item.owner | default(glance_system_user_name) }}"
+    group: "{{ item.group | default(glance_system_group_name) }}"
+    mode: "{{ item.mode | default(omit) }}"
   when:
-    - item.path not in glance_mount_points
+    - "item.path not in glance_mount_points"
   with_items:
-    - { path: "/openstack", mode: "0755", owner: "root", group: "root" }
-    - { path: "/etc/glance", mode: "0750" }
-    - { path: "/var/cache/glance" }
-    - { path: "{{ glance_system_user_home }}" }
-    - { path: "{{ glance_system_user_home }}/cache/api", mode: "0700" }
-    - { path: "{{ glance_system_user_home }}/cache/registry" }
-    - { path: "{{ glance_system_user_home }}/scrubber" }
-
-- name: Create glance images dir
-  file:
-    path: "{{ glance_system_user_home }}/images/"
-    state: directory
-    owner: "{{ glance_system_user_name }}"
-    group: "{{ glance_system_group_name }}"
-    mode: "0755"
-  when:
-    - glance_system_user_home + '/images' not in glance_mount_points
-
-- name: Test for log directory or link
-  shell: |
-    if [ -h "/var/log/glance"  ]; then
-      chown -h {{ glance_system_user_name }}:{{ glance_system_group_name }} "/var/log/glance"
-      chown -R {{ glance_system_user_name }}:{{ glance_system_group_name }} "$(readlink /var/log/glance)"
-    else
-      exit 1
-    fi
-  register: log_dir
-  failed_when: false
-  changed_when: log_dir.rc != 0
-
-- name: Create glance log dir
-  file:
-    path: "/var/log/glance"
-    state: directory
-    owner: "{{ glance_system_user_name }}"
-    group: "{{ glance_system_group_name }}"
-    mode: "0755"
-  when:
-    - log_dir.rc != 0
+    - path: "/openstack"
+      mode: "0755"
+      owner: "root"
+      group: "root"
+    - path: "/etc/glance"
+      mode: "0750"
+    - path: "/var/cache/glance"
+    - path: "{{ glance_system_user_home }}"
+    - path: "{{ glance_system_user_home }}/cache/api"
+      mode: "0700"
+    - path: "{{ glance_system_user_home }}/cache/registry"
+    - path: "{{ glance_system_user_home }}/scrubber"
+    - path: "{{ glance_system_user_home }}/images"
+      mode: "0755"
+    - path: "/var/log/glance"
+      mode: "0755"
 
 - name: Install distro packages
   package:
