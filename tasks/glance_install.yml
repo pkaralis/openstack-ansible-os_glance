@@ -13,6 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: Record the installation method
+  ini_file:
+    dest: "/etc/ansible/facts.d/openstack_ansible.fact"
+    section: "glance"
+    option: "install_method"
+    value: "{{ glance_install_method }}"
+
+- name: Refresh local facts to ensure the glance section is present
+  setup:
+    filter: ansible_local
+    gather_subset: "!all"
+
 - name: create the system group
   group:
     name: "{{ glance_system_group_name }}"
@@ -90,7 +102,7 @@
     update_cache: "{{ (ansible_pkg_mgr in ['apt', 'zypper']) | ternary('yes', omit) }}"
     cache_valid_time: "{{ (ansible_pkg_mgr == 'apt') | ternary(cache_timeout, omit) }}"
   register: install_packages
-  until: install_packages|success
+  until: install_packages | success
   retries: 5
   delay: 2
 
@@ -101,23 +113,11 @@
 - name: Record the need for a service restart
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
-    section: glance
-    option: "{{ item.name }}"
-    value: "{{ item.state }}"
-  with_items:
-    - name: "need_service_restart"
-      state: "True"
-    - name: "install_method"
-      state: "{{ glance_install_method }}"
-  when: (glance_install_method == 'source' and
-         ((glance_get_venv | changed) or
-          (glance_venv_dir | changed))) or
-        (install_packages | changed) or
-        (ansible_local is not defined) or
-        ('openstack_ansible' not in ansible_local) or
-        ('glance' not in ansible_local['openstack_ansible']) or
-        ('need_service_restart' not in ansible_local['openstack_ansible']['glance']) or
-        ('install_method' not in ansible_local['openstack_ansible']['glance'])
+    section: "glance"
+    option: "need_service_restart"
+    value: true
+  when: (install_packages | changed) or
+        ('need_service_restart' not in ansible_local['openstack_ansible']['glance'])
 
 - name: Run the systemd service role
   include_role:
