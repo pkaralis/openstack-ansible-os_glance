@@ -106,6 +106,8 @@ glance_rabbitmq_telemetry_servers: "{{ glance_rabbitmq_servers }}"
 glance_rabbitmq_telemetry_use_ssl: "{{ glance_rabbitmq_use_ssl }}"
 
 ## Database info
+glance_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'][0], 'localhost') }}"
+glance_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 glance_galera_database: glance
 glance_galera_user: glance
 glance_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
