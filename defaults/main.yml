@@ -224,7 +224,6 @@ glance_service_in_ldap: false
 # Cinder packages that must be installed before anything else
 glance_requires_pip_packages:
   - virtualenv
-  - python-keystoneclient # Keystoneclient needed to OSA keystone lib
   - httplib2
 
 # Common pip packages
