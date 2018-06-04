@@ -19,8 +19,7 @@ enable_v1_registry = {{ glance_enable_v1_api | bool }}
 enable_v2_api = {{ glance_enable_v2_api | bool }}
 enable_v2_registry = {{ glance_enable_v2_registry | bool }}
 
-transport_url = rabbit://{% for host in glance_rabbitmq_servers.split(',') %}{{ glance_rabbitmq_userid }}:{{ glance_rabbitmq_password }}@{{ host }}:{{ glance_rabbitmq_port }}{% if not loop.last %},{% else %}/{{ glance_rabbitmq_vhost }}{% endif %}{% endfor %}
-
+transport_url = {{ glance_oslomsg_rpc_transport }}://{% for host in glance_oslomsg_rpc_servers.split(',') %}{{ glance_oslomsg_rpc_userid }}:{{ glance_oslomsg_rpc_password }}@{{ host }}:{{ glance_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ glance_oslomsg_rpc_vhost }}{% if glance_oslomsg_rpc_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 [database]
 connection = mysql+pymysql://{{ glance_galera_user }}:{{ glance_container_mysql_password }}@{{ glance_galera_address }}/{{ glance_galera_database }}?charset=utf8{% if glance_galera_use_ssl | bool %}&ssl_ca={{ glance_galera_ssl_ca_cert }}{% endif %}
@@ -46,14 +45,13 @@ memcache_security_strategy = ENCRYPT
 memcache_secret_key = {{ memcached_encryption_key }}
 
 [oslo_messaging_rabbit]
-ssl = {{ glance_rabbitmq_use_ssl }}
 rabbit_notification_exchange = glance
 rabbit_notification_topic = notifications
 
 {% if glance_ceilometer_enabled %}
 [oslo_messaging_notifications]
 driver = messagingv2
-transport_url = rabbit://{% for host in glance_rabbitmq_telemetry_servers.split(',') %}{{ glance_rabbitmq_telemetry_userid }}:{{ glance_rabbitmq_telemetry_password }}@{{ host }}:{{ glance_rabbitmq_telemetry_port }}{% if not loop.last %},{% else %}/{{ glance_rabbitmq_telemetry_vhost }}{% endif %}{% endfor %}
+transport_url = {{ glance_oslomsg_notify_transport }}://{% for host in glance_oslomsg_notify_servers.split(',') %}{{ glance_oslomsg_notify_userid }}:{{ glance_oslomsg_notify_password }}@{{ host }}:{{ glance_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ glance_oslomsg_notify_vhost }}{% if glance_oslomsg_notify_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 {% endif %}
 
 [oslo_policy]

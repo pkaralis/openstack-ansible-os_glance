@@ -90,20 +90,25 @@ glance_enable_v2_registry: False
 
 ## RabbitMQ info
 
-## Configuration for RPC communications
-glance_rabbitmq_userid: glance
-glance_rabbitmq_vhost: /glance
-glance_rabbitmq_port: 5672
-glance_rabbitmq_servers: 127.0.0.1
-glance_rabbitmq_use_ssl: False
+## Oslo Messaging Info
 
-## Configuration for notifications communication, i.e. [oslo_messaging_notifications]
-glance_rabbitmq_telemetry_userid: "{{ glance_rabbitmq_userid }}"
-glance_rabbitmq_telemetry_password: "{{ glance_rabbitmq_password }}"
-glance_rabbitmq_telemetry_vhost: "{{ glance_rabbitmq_vhost }}"
-glance_rabbitmq_telemetry_port: "{{ glance_rabbitmq_port }}"
-glance_rabbitmq_telemetry_servers: "{{ glance_rabbitmq_servers }}"
-glance_rabbitmq_telemetry_use_ssl: "{{ glance_rabbitmq_use_ssl }}"
+# RPC
+
+glance_oslomsg_rpc_transport: rabbit
+glance_oslomsg_rpc_servers: 127.0.0.1
+glance_oslomsg_rpc_port: 5672
+glance_oslomsg_rpc_use_ssl: False
+glance_oslomsg_rpc_userid: glance
+glance_oslomsg_rpc_vhost: /glance
+
+# Notify
+
+glance_oslomsg_notify_transport: rabbit
+glance_oslomsg_notify_servers: 127.0.0.1
+glance_oslomsg_notify_port: 5672
+glance_oslomsg_notify_use_ssl: False
+glance_oslomsg_notify_userid: glance
+glance_oslomsg_notify_vhost: /glance
 
 ## Database info
 glance_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'][0], 'localhost') }}"
