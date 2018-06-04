@@ -18,6 +18,7 @@ glance_distro_packages:
   - git-core
   - libxml2-devel
   - nfs-utils
+  - python-keystoneclient # Keystoneclient needed to OSA keystone lib
   - rpcbind
 
 glance_service_distro_packages:
