@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-glance_package_list: "{{ glance_distro_packages }}"
+glance_package_list: "{{ glance_distro_packages + glance_devel_distro_packages }}"
 
 _glance_bin: "/openstack/venvs/glance-{{ glance_venv_tag }}/bin"
 _glance_etc: "{{ _glance_bin | dirname + '/etc' }}"
