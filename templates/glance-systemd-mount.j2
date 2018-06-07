@@ -1,6 +1,9 @@
 [Unit]
 Description=Glance Images {{ item.local_path }}
-After=network.target
+Conflicts=umount.target
+Requires=rpcbind.service rpc-statd.service
+After=network.target rpcbind.service rpc-statd.service
+Before=glance-api.service
 
 [Mount]
 What={{ item.server }}:{{ item.remote_path }}
