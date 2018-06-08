@@ -237,6 +237,7 @@ glance_pip_packages:
   - glance
   - keystonemiddleware
   - os-brick
+  - osprofiler
   - PyMySQL
   - python-cinderclient
   - python-glanceclient
