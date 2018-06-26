@@ -78,12 +78,6 @@
     - Manage LB
     - Restart glance services
 
-- name: Create nfs shares local path
-  file:
-    path: "{{ item.local_path }}"
-    state: directory
-  with_items: "{{ glance_nfs_client }}"
-
 - name: Glance nfs mount(s)
   config_template:
     src: "glance-systemd-mount.j2"

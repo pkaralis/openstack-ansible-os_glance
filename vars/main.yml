@@ -29,3 +29,13 @@ filtered_glance_services: |-
   {%   endif %}
   {% endfor %}
   {{ services | sort(attribute='start_order') }}
+
+# Define all glance mountpoints when using NFS. If defined
+# the corresponding directory will only be created by the
+# mount point task.
+glance_mount_points: |-
+  {% set mps = [] %}
+  {% for mp in glance_nfs_client %}
+  {%   set _ = mps.append(mp.local_path) %}
+  {% endfor %}
+  {{ mps }}
