@@ -143,6 +143,9 @@
   with_items: "{{ filtered_glance_services }}"
   loop_control:
     loop_var: service_var
+  tags:
+    - glance-config
+    - systemd-service
 
 - name: Ensure uWSGI directory exists
   file:
