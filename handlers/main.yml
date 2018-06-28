@@ -24,7 +24,9 @@
   until: _stop is success
   retries: 5
   delay: 2
-  listen: "Restart glance services"
+  listen:
+    - "Restart glance services"
+    - "venv changed"
 
 # TODO(odyssey4me):
 # Assuming glance-registry is removed in the S cycle as planned, this
@@ -52,7 +54,9 @@
   register: _remove_glance_service
   changed_when: _remove_glance_service.rc == 2
   failed_when: _remove_glance_service.rc not in [0, 2]
-  listen: "Restart glance services"
+  listen:
+    - "Restart glance services"
+    - "venv changed"
   # This task causes ansible-lint to give a ANSIBLE0014
   # error, which does not make much sense given how the
   # environment variable is used in this case.
@@ -74,7 +78,9 @@
     - "/etc/systemd/system/{{ glance_services['glance-registry']['service_name'] }}.service"
   when:
     - not glance_services['glance-registry']['condition']
-  listen: "Restart glance services"
+  listen:
+    - "Restart glance services"
+    - "venv changed"
 
 # Note (odyssey4me):
 # The policy.json file is currently read continually by the services
@@ -92,7 +98,9 @@
     group: "{{ glance_system_group_name }}"
     mode: "0640"
     remote_src: yes
-  listen: "Restart glance services"
+  listen:
+    - "Restart glance services"
+    - "venv changed"
 
 - name: Start services
   service:
@@ -105,7 +113,9 @@
   until: _start is success
   retries: 5
   delay: 2
-  listen: "Restart glance services"
+  listen:
+    - "Restart glance services"
+    - "venv changed"
 
 - meta: noop
   listen: Manage LB
