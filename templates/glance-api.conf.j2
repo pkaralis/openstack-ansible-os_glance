@@ -118,3 +118,10 @@ enabled = {{ glance_profiler_enabled }}
 [oslo_middleware]
 enable_proxy_headers_parsing = True
 {% endif %}
+
+{% if glance_cors_allowed_origin is not none %}
+[cors]
+allow_headers = origin,content-md5,x-image-meta-checksum,x-storage-token,accept-encoding,x-auth-token,x-identity-status,x-roles,x-service-catalog,x-user-id,x-tenant-id,x-openstack-request-id
+allow_methods = GET,POST,PUT,PATCH,DELETE
+allowed_origin = {{ glance_cors_allowed_origin }}
+{% endif %}
