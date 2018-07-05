@@ -93,20 +93,22 @@ glance_enable_v2_registry: False
 ## Oslo Messaging Info
 
 # RPC
-
-glance_oslomsg_rpc_transport: rabbit
-glance_oslomsg_rpc_servers: 127.0.0.1
-glance_oslomsg_rpc_port: 5672
-glance_oslomsg_rpc_use_ssl: False
+glance_oslomsg_rpc_host_group: "{{ oslomsg_rpc_host_group | default('rabbitmq_all') }}"
+glance_oslomsg_rpc_setup_host: "{{ (glance_oslomsg_rpc_host_group in groups) | ternary(groups[glance_oslomsg_rpc_host_group][0], 'localhost') }}"
+glance_oslomsg_rpc_transport: "{{ oslomsg_rpc_transport | default('rabbit') }}"
+glance_oslomsg_rpc_servers: "{{ oslomsg_rpc_servers | default('127.0.0.1') }}"
+glance_oslomsg_rpc_port: "{{ oslomsg_rpc_port | default('5672') }}"
+glance_oslomsg_rpc_use_ssl: "{{ oslomsg_rpc_use_ssl | default(False) }}"
 glance_oslomsg_rpc_userid: glance
 glance_oslomsg_rpc_vhost: /glance
 
 # Notify
-
-glance_oslomsg_notify_transport: rabbit
-glance_oslomsg_notify_servers: 127.0.0.1
-glance_oslomsg_notify_port: 5672
-glance_oslomsg_notify_use_ssl: False
+glance_oslomsg_notify_host_group: "{{ oslomsg_rpc_host_group | default('rabbitmq_all') }}"
+glance_oslomsg_notify_setup_host: "{{ (glance_oslomsg_rpc_host_group in groups) | ternary(groups[glance_oslomsg_rpc_host_group][0], 'localhost') }}"
+glance_oslomsg_notify_transport: "{{ oslomsg_rpc_transport | default('rabbit') }}"
+glance_oslomsg_notify_servers: "{{ oslomsg_rpc_servers | default('127.0.0.1') }}"
+glance_oslomsg_notify_port: "{{ oslomsg_rpc_port | default('5672') }}"
+glance_oslomsg_notify_use_ssl: "{{ oslomsg_rpc_use_ssl | default(False) }}"
 glance_oslomsg_notify_userid: glance
 glance_oslomsg_notify_vhost: /glance
 
