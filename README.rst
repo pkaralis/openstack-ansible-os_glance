@@ -21,4 +21,4 @@ Release notes for the project can be found at:
   https://docs.openstack.org/releasenotes/openstack-ansible-os_glance/
 
 The project home is at:
-  http://launchpad.net/openstack-ansible
+  https://launchpad.net/openstack-ansible
