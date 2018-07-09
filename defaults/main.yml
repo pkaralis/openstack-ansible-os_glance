@@ -19,6 +19,11 @@ debug: False
 # Set installation method
 glance_install_method: "source"
 
+# Set the host which will execute the shade modules
+# for the service setup. The host must already have
+# clouds.yaml properly configured.
+glance_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
+
 # Set the package install state for distribution and pip packages
 # Options are 'present' and 'latest'
 glance_package_state: "latest"
@@ -226,12 +231,6 @@ glance_rbd_store_user: '{{ glance_ceph_client }}'
 glance_rbd_store_chunk_size: 8
 
 glance_service_in_ldap: false
-
-
-# Cinder packages that must be installed before anything else
-glance_requires_pip_packages:
-  - virtualenv
-  - httplib2
 
 # Common pip packages
 glance_pip_packages:
