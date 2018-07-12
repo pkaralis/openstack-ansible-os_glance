@@ -41,21 +41,21 @@
   file:
     path: "{{ glance_bin | dirname }}"
     state: absent
-  when: glance_get_venv | changed
+  when: glance_get_venv  is changed
 
 - name: Create glance venv dir
   file:
     path: "{{ glance_bin | dirname }}"
     state: directory
   register: glance_venv_dir
-  when: glance_get_venv | changed
+  when: glance_get_venv  is changed
 
 - name: Unarchive pre-built venv
   unarchive:
     src: "/var/cache/{{ glance_venv_download_url | basename }}"
     dest: "{{ glance_bin | dirname }}"
     copy: "no"
-  when: glance_get_venv | changed
+  when: glance_get_venv  is changed
   notify:
     - Manage LB
     - Restart glance services
@@ -71,7 +71,7 @@
       {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''),'') }}
       {{ pip_install_options | default('') }}
   register: install_packages
-  until: install_packages|success
+  until: install_packages is success
   retries: 5
   delay: 2
   when: glance_get_venv | failed or glance_get_venv | skipped
@@ -85,7 +85,7 @@
     state: "absent"
   when:
     - ansible_pkg_mgr in ['yum', 'dnf', 'zypper']
-    - glance_get_venv | changed
+    - glance_get_venv  is changed
 
 # NOTE(odyssey4me):
 # We reinitialize the venv to ensure that the right
@@ -103,7 +103,7 @@
         --no-pip \
         --no-setuptools \
         --no-wheel
-  when: glance_get_venv | changed
+  when: glance_get_venv  is changed
   tags:
     - skip_ansible_lint
 
