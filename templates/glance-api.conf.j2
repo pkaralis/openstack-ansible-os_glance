@@ -68,7 +68,7 @@ policy_default_rule = {{ glance_policy_default_rule }}
 policy_dirs = {{ glance_policy_dirs }}
 
 [oslo_messaging_rabbit]
-ssl = {{ glance_oslomsg_rpc_use_ssl }}
+ssl = {{ glance_oslomsg_notify_use_ssl | bool }}
 rabbit_notification_exchange = glance
 rabbit_notification_topic = notifications
 
