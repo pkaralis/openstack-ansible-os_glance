@@ -86,8 +86,6 @@ glance_show_multiple_locations: "{{ glance_default_store == 'rbd' }}"
 
 
 ## API options
-# The v1 API is deprecated and scheduled for removal in Queens.
-glance_enable_v1_api: False
 glance_enable_v2_api: True
 # The v2 API does not require the registry service.
 # The registry service is scheduled for removal in the S cycle.
@@ -259,24 +257,16 @@ glance_services:
     init_config_overrides: "{{ glance_api_init_overrides }}"
     start_order: 1
     wsgi_overrides: "{{ glance_api_uwsgi_ini_overrides }}"
-    wsgi_app: "{{ not glance_enable_v1_api }}"
+    wsgi_app: True
     wsgi_name: glance-wsgi-api
     uwsgi_bind_address: "{{ glance_api_bind_address }}"
     uwsgi_port: "{{ glance_api_service_port }}"
-    execstarts: >-
-       {{ glance_enable_v1_api | ternary(
-          glance_bin ~ '/glance-api',
-          glance_uwsgi_bin ~ '/uwsgi --autoload --ini /etc/uwsgi/glance-api.ini')
-       }}
-    execreloads: >-
-       {{ glance_enable_v1_api | ternary(
-          '/bin/kill -HUP $MAINPID',
-          glance_uwsgi_bin ~ '/uwsgi --reload /var/run/glance-api/glance-api.pid')
-       }}
+    execstarts: "{{ glance_uwsgi_bin }}/uwsgi --autoload --ini /etc/uwsgi/glance-api.ini"
+    execreloads: "{{ glance_uwsgi_bin }}/uwsgi --reload /var/run/glance-api/glance-api.pid"
   glance-registry:
     group: glance_registry
     service_name: glance-registry
-    condition: "{{ glance_enable_v1_api | bool or glance_enable_v2_registry | bool }}"
+    condition: "{{ glance_enable_v2_registry | bool }}"
     init_config_overrides: "{{ glance_registry_init_overrides }}"
     start_order: 2
     execstarts: "{{ _glance_bin }}/glance-registry"

@@ -19,7 +19,6 @@
       jobs:
         - openstack-ansible-nfs_glance
         - openstack-ansible-upgrade-ubuntu-xenial
-        - openstack-ansible-v1_api_enabled
         - openstack-ansible-v2_registry_enabled
         - openstack-ansible-glance-ssl-nv
         - openstack-ansible-functional-distro_install-ubuntu-xenial
@@ -32,5 +31,4 @@
       jobs:
         - openstack-ansible-nfs_glance
         - openstack-ansible-upgrade-ubuntu-xenial
-        - openstack-ansible-v1_api_enabled
         - openstack-ansible-v2_registry_enabled

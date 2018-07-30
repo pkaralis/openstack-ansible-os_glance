@@ -14,8 +14,6 @@ workers = {{ glance_registry_workers | default(glance_api_threads) }}
 api_limit_max = 1000
 limit_param_default = 25
 
-enable_v1_api = {{ glance_enable_v1_api | bool }}
-enable_v1_registry = {{ glance_enable_v1_api | bool }}
 enable_v2_api = {{ glance_enable_v2_api | bool }}
 enable_v2_registry = {{ glance_enable_v2_registry | bool }}
 
