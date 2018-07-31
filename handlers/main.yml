@@ -13,14 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Start glance mount(s)
-  systemd:
-    daemon_reload: yes
-    name: "{{ item.local_path.lstrip('/') | replace('/', '-') }}.mount"
-    enabled: "yes"
-    state: "restarted"
-  with_items: "{{ glance_nfs_client }}"
-
 - name: Stop services
   service:
     name: "{{ item.service_name }}"
