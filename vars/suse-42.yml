@@ -17,7 +17,6 @@
 glance_distro_packages:
   - git-core
   - nfs-utils
-  - python-keystoneclient # Keystoneclient needed to OSA keystone lib
   - rpcbind
 
 glance_devel_distro_packages:
