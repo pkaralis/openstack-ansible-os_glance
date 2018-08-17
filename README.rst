@@ -11,7 +11,7 @@ Team and repository tags
 OpenStack-Ansible glance
 ========================
 
-This Ansible role installs and configures OpenStack glance and the
+This Ansible role installs and configures OpenStack glance api and the
 glance registry.
 
 Documentation for the project can be found at:
