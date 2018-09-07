@@ -24,7 +24,6 @@
         - openstack-ansible-functional-opensuse-423
         - openstack-ansible-functional-ubuntu-xenial
         - openstack-ansible-nfs_glance
-        - openstack-ansible-upgrade-ubuntu-xenial
         - openstack-ansible-v2_api_only
         - openstack-ansible-v2_only_registry_enabled
     gate:
@@ -34,6 +33,5 @@
         - openstack-ansible-functional-opensuse-423
         - openstack-ansible-functional-ubuntu-xenial
         - openstack-ansible-nfs_glance
-        - openstack-ansible-upgrade-ubuntu-xenial
         - openstack-ansible-v2_api_only
         - openstack-ansible-v2_only_registry_enabled
