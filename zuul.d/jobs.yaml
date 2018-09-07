@@ -33,10 +33,3 @@
     nodeset: ubuntu-xenial
     vars:
       tox_env: nfs
-
-- job:
-    name: openstack-ansible-glance-ssl-nv
-    parent: openstack-ansible-functional-ubuntu-xenial
-    voting: false
-    vars:
-      tox_env: ssl

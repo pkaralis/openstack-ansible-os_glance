@@ -50,7 +50,3 @@
   src: https://git.openstack.org/openstack/openstack-ansible-os_tempest
   scm: git
   version: stable/queens
-- name: os_previous_glance
-  src: https://git.openstack.org/openstack/openstack-ansible-os_glance
-  scm: git
-  version: stable/pike
