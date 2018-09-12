@@ -29,4 +29,9 @@ glance_service_distro_packages:
   - uwsgi
   - uwsgi-python
 
+glance_oslomsg_amqp1_distro_packages:
+  - cyrus-sasl
+  - cyrus-sasl-plain
+  - cyrus-sasl-digestmd5
+
 glance_uwsgi_bin: '/usr/sbin'
