@@ -1,3 +1,4 @@
+---
 - name: Install glance server
   hosts: glance_all
   user: root
