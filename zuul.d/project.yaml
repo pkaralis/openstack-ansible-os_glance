@@ -25,6 +25,7 @@
         - openstack-ansible-functional-distro_install-ubuntu-xenial
         - openstack-ansible-functional-distro_install-centos-7
         - openstack-ansible-functional-distro_install-opensuse-423
+        - openstack-ansible-functional-distro_install-opensuse-150
     gate:
       jobs:
         - openstack-ansible-nfs_glance
@@ -32,3 +33,4 @@
         - openstack-ansible-functional-distro_install-ubuntu-xenial
         - openstack-ansible-functional-distro_install-centos-7
         - openstack-ansible-functional-distro_install-opensuse-423
+        - openstack-ansible-functional-distro_install-opensuse-150
