@@ -70,11 +70,9 @@ ssl = {{ glance_oslomsg_notify_use_ssl | bool }}
 rabbit_notification_exchange = glance
 rabbit_notification_topic = notifications
 
-{% if glance_ceilometer_enabled %}
 [oslo_messaging_notifications]
-driver = messagingv2
+driver = {% if glance_ceilometer_enabled %}messagingv2{% else %}noop{% endif %}
 transport_url = {{ glance_oslomsg_notify_transport }}://{% for host in glance_oslomsg_notify_servers.split(',') %}{{ glance_oslomsg_notify_userid }}:{{ glance_oslomsg_notify_password }}@{{ host }}:{{ glance_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ glance_oslomsg_notify_vhost }}{% if glance_oslomsg_notify_use_ssl | bool %}?ssl=1{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
-{% endif %}
 
 [paste_deploy]
 flavor = {{ glance_flavor }}
