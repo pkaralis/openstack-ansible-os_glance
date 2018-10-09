@@ -20,4 +20,6 @@ glance_nfs_client:
     remote_path: "/srv/nfs/glance"
     local_path: "/var/lib/glance/images"
     type: "nfs"
+    own: "glance"
+    group: "glance"
     options: "_netdev,auto"
