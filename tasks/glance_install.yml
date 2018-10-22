@@ -74,6 +74,8 @@
     - path: "{{ glance_system_user_home }}/scrubber"
     - path: "{{ glance_system_user_home }}/images"
       mode: "0755"
+      owner: "{{ item.owner | default(glance_system_user_name) }}"
+      group: "{{ item.group | default(glance_system_group_name) }}"
     - path: "/var/log/glance"
       mode: "0755"
 
