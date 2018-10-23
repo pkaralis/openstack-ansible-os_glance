@@ -19,6 +19,7 @@ cache_timeout: 600
 # Common apt packages
 glance_distro_packages:
   - git
+  - libxml2
   - nfs-common
   - rpcbind
 
