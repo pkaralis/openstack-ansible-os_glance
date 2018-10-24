@@ -17,6 +17,7 @@ glance_distro_packages:
   - git
   - nfs-utils
   - rpcbind
+  - cronie
 
 glance_devel_distro_packages:
   - libxml2-devel
