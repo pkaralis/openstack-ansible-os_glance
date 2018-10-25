@@ -22,6 +22,7 @@ glance_distro_packages:
   - libxml2
   - nfs-common
   - rpcbind
+  - cron
 
 glance_devel_distro_packages:
   - libxml2-dev
