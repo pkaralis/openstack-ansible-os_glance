@@ -16,6 +16,7 @@
 
 glance_distro_packages:
   - git-core
+  - libxml2
   - nfs-utils
   - rpcbind
 
