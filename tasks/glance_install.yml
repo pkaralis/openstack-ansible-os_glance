@@ -72,7 +72,7 @@
       mode: "0700"
     - path: "{{ glance_system_user_home }}/cache/registry"
     - path: "{{ glance_system_user_home }}/scrubber"
-    - path: "{{ glance_storage_path }}"
+    - path: "{{ glance_system_user_home }}/images"
       mode: "0755"
       owner: "glance"
       group: "glance"
