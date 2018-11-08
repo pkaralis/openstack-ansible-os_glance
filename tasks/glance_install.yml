@@ -48,6 +48,8 @@
     path: "{{ item.local_path }}"
     state: directory
     mode: "0755"
+    owner: "{{ item.owner | default(glance_system_user_name) }}"
+    group: "{{ item.group | default(glance_system_group_name) }}"
   with_items: "{{ glance_nfs_client }}"
 
 - name: Create glance directories
